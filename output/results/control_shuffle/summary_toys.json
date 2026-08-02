@@ -1,0 +1,59 @@
+{
+  "label": "shuffled_text",
+  "dataset": "amazon_toys",
+  "source_reports": [
+    "output/results/control_shuffle/control_shuffle_embeddings_toys_seed0.json",
+    "output/results/control_shuffle/control_shuffle_embeddings_toys_seed1.json",
+    "output/results/control_shuffle/control_shuffle_embeddings_toys_seed2.json"
+  ],
+  "formal_protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "fusion": {
+    "R@5": {
+      "mean": 0.06623051033724844,
+      "std": 0.001190791843367388
+    },
+    "N@5": {
+      "mean": 0.04780771310716431,
+      "std": 0.0011957199785576193
+    },
+    "R@10": {
+      "mean": 0.09121505597911944,
+      "std": 0.00184039808702012
+    },
+    "N@10": {
+      "mean": 0.05586695339866345,
+      "std": 0.0014319290369364359
+    },
+    "R@20": {
+      "mean": 0.12160862696613779,
+      "std": 0.003732700593085102
+    },
+    "N@20": {
+      "mean": 0.06352179154073156,
+      "std": 0.0018102697302450272
+    }
+  },
+  "mean_test_weights": {
+    "SASRec": {
+      "mean": 0.5758403539657593,
+      "std": 0.00986586502293482
+    },
+    "ItemCF": {
+      "mean": 0.20807339251041412,
+      "std": 0.006746290281432115
+    },
+    "Semantic": {
+      "mean": 0.21608765920003256,
+      "std": 0.016296550967748923
+    }
+  },
+  "mean_test_penalty": {
+    "mean": 0.09905212372541428,
+    "std": 1.6691355972505084e-05
+  }
+}

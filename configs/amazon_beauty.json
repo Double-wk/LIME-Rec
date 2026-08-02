@@ -1,0 +1,14 @@
+{
+  "name": "amazon_beauty",
+  "domain": "beauty",
+  "interactions_path": "data/amazon/beauty/train.jsonl",
+  "metadata_path": "data/amazon/beauty/meta.jsonl",
+  "min_user_interactions": 5,
+  "min_item_interactions": 5,
+  "split_strategy": "leave_two_out",
+  "eval_k": [
+    5,
+    10
+  ],
+  "source": "GRAM rec_datasets"
+}

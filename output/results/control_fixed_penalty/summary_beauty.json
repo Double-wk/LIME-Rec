@@ -1,0 +1,59 @@
+{
+  "label": "fixed_penalty",
+  "dataset": "amazon_beauty",
+  "source_reports": [
+    "output/results/control_fixed_penalty/control_fixed_penalty_beauty_seed0.json",
+    "output/results/control_fixed_penalty/control_fixed_penalty_beauty_seed1.json",
+    "output/results/control_fixed_penalty/control_fixed_penalty_beauty_seed2.json"
+  ],
+  "formal_protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "fusion": {
+    "R@5": {
+      "mean": 0.06954940452235091,
+      "std": 0.0011508222299904654
+    },
+    "N@5": {
+      "mean": 0.048705763790630095,
+      "std": 0.0007557826815756426
+    },
+    "R@10": {
+      "mean": 0.09903262829972126,
+      "std": 0.0009211354800626262
+    },
+    "N@10": {
+      "mean": 0.05821569360376989,
+      "std": 0.00029642116799243214
+    },
+    "R@20": {
+      "mean": 0.13766787401809535,
+      "std": 0.0021586337350117278
+    },
+    "N@20": {
+      "mean": 0.06798147554043,
+      "std": 0.0004938825757180693
+    }
+  },
+  "mean_test_weights": {
+    "SASRec": {
+      "mean": 0.5568147699038187,
+      "std": 0.005401497803358033
+    },
+    "ItemCF": {
+      "mean": 0.12386353313922882,
+      "std": 0.005971788750763954
+    },
+    "Semantic": {
+      "mean": 0.3193223973115285,
+      "std": 0.0010705565741901677
+    }
+  },
+  "mean_test_penalty": {
+    "mean": 0.09350263824065526,
+    "std": 3.2024103803482835e-05
+  }
+}

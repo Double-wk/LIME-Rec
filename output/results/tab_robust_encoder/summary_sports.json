@@ -1,0 +1,59 @@
+{
+  "label": "MiniLM",
+  "dataset": "amazon_sports",
+  "source_reports": [
+    "output/results/tab_robust_encoder/repeat_aware_sports_minilm_seed0.json",
+    "output/results/tab_robust_encoder/repeat_aware_sports_minilm_seed1.json",
+    "output/results/tab_robust_encoder/repeat_aware_sports_minilm_seed2.json"
+  ],
+  "formal_protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "fusion": {
+    "R@5": {
+      "mean": 0.04094799333295878,
+      "std": 0.0005731852329832368
+    },
+    "N@5": {
+      "mean": 0.028430697601705673,
+      "std": 0.0004604489957366094
+    },
+    "R@10": {
+      "mean": 0.05837406595876173,
+      "std": 0.000900242730432163
+    },
+    "N@10": {
+      "mean": 0.03402740648218568,
+      "std": 0.00048313106442969387
+    },
+    "R@20": {
+      "mean": 0.08334737906623968,
+      "std": 0.002052984593583173
+    },
+    "N@20": {
+      "mean": 0.04030643509318608,
+      "std": 0.0008308078661457419
+    }
+  },
+  "mean_test_weights": {
+    "SASRec": {
+      "mean": 0.5197594364484152,
+      "std": 0.007113438427312197
+    },
+    "ItemCF": {
+      "mean": 0.19024463494618735,
+      "std": 0.0046070401469256615
+    },
+    "Semantic": {
+      "mean": 0.28999696175257367,
+      "std": 0.011005809829168099
+    }
+  },
+  "mean_test_penalty": {
+    "mean": 0.09950064867734909,
+    "std": 6.974225003425043e-06
+  }
+}

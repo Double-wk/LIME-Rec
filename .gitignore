@@ -1,0 +1,30 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments and packaging
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+
+# Downloaded data and regenerated large artifacts
+/data/
+/outputs/
+*.pt
+*.pth
+*.npz
+
+# Logs, editors, and operating-system files
+*.log
+*.cuda.log
+.DS_Store
+.idea/
+.vscode/

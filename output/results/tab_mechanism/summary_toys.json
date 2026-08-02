@@ -1,0 +1,388 @@
+{
+  "dataset": "amazon_toys",
+  "formal_protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog",
+    "initial_weights": [
+      0.6,
+      0.15,
+      0.25
+    ],
+    "statistic": "mean and sample standard deviation across seeds 0, 1, 2"
+  },
+  "per_seed": [
+    {
+      "input": "output/results/tab_mechanism/per_user_amazon_toys_seed0.jsonl",
+      "metadata": {
+        "dataset": "amazon_toys",
+        "source_report": "output/results/tab_main/repeat_aware_toys_seed0.json",
+        "protocol": {
+          "gate_fit_split": "validation",
+          "test_used_for_training_or_selection": false,
+          "mask_history": false,
+          "ranking": "full_catalog"
+        },
+        "gate": {
+          "initial_weights": [
+            0.6,
+            0.15,
+            0.25
+          ],
+          "score_scale": 20.0,
+          "max_penalty": 0.1,
+          "seed": 0,
+          "fit_split": "validation"
+        },
+        "sample": {
+          "n_users": 2000,
+          "max_users": 2000,
+          "sampling_seed": 42,
+          "topk": 10
+        },
+        "checkpoint": "output/models/amazon_toys_sasrec_seed0.pt",
+        "itemcf": "output/models/amazon_toys_itemcf.json",
+        "semantic_embedding": "output/models/amazon_toys_bge_base.npz"
+      },
+      "analysis": {
+        "n_users": 2000,
+        "K_jaccard": 10,
+        "K_lift": 10,
+        "fusion_key": "repeat_aware",
+        "rq3_1_jaccard_mean": {
+          "SASRec,ItemCF": 0.05238556232209483,
+          "SASRec,Semantic": 0.048414407058369906,
+          "ItemCF,Semantic": 0.08117294178130091
+        },
+        "rq3_2_spearman_mean": {
+          "SASRec,ItemCF": 0.09466935267703507,
+          "SASRec,Semantic": 0.1429600737817816,
+          "ItemCF,Semantic": 0.07991537519839013
+        },
+        "rq3_3_lift_attribution": {
+          "n_users": 2000,
+          "hit10": {
+            "SASRec": 0.0825,
+            "ItemCF": 0.064,
+            "Semantic": 0.0525,
+            "Fusion": 0.1235
+          },
+          "n_recovered (Fusion@10 hit, SASRec@10 miss)": 105,
+          "recovered_pct": 0.0525,
+          "attribution_breakdown": {
+            "semantic_only_hit": {
+              "count": 21,
+              "pct_of_recovered": 0.2
+            },
+            "fusion_promotion (no expert top10)": {
+              "count": 44,
+              "pct_of_recovered": 0.41904761904761906
+            },
+            "itemcf_only_hit": {
+              "count": 29,
+              "pct_of_recovered": 0.2761904761904762
+            },
+            "both_sem_and_cf_hit": {
+              "count": 11,
+              "pct_of_recovered": 0.10476190476190476
+            }
+          }
+        },
+        "rq3_4_hit_set_decomposition_pct": {
+          "NONE": 86.55,
+          "only_SAS": 4.2,
+          "only_ICF": 2.05,
+          "only_SEM": 2.55,
+          "SAS_ICF": 1.95,
+          "SAS_SEM": 0.3,
+          "ICF_SEM": 0.6,
+          "ALL": 1.8
+        }
+      },
+      "recovered_pct": 0.0525,
+      "hit10": {
+        "SASRec": 0.0825,
+        "ItemCF": 0.064,
+        "Semantic": 0.0525,
+        "Fusion": 0.1235
+      }
+    },
+    {
+      "input": "output/results/tab_mechanism/per_user_amazon_toys_seed1.jsonl",
+      "metadata": {
+        "dataset": "amazon_toys",
+        "source_report": "output/results/tab_main/repeat_aware_toys_seed1.json",
+        "protocol": {
+          "gate_fit_split": "validation",
+          "test_used_for_training_or_selection": false,
+          "mask_history": false,
+          "ranking": "full_catalog"
+        },
+        "gate": {
+          "initial_weights": [
+            0.6,
+            0.15,
+            0.25
+          ],
+          "score_scale": 20.0,
+          "max_penalty": 0.1,
+          "seed": 1,
+          "fit_split": "validation"
+        },
+        "sample": {
+          "n_users": 2000,
+          "max_users": 2000,
+          "sampling_seed": 42,
+          "topk": 10
+        },
+        "checkpoint": "output/models/amazon_toys_sasrec_seed1.pt",
+        "itemcf": "output/models/amazon_toys_itemcf.json",
+        "semantic_embedding": "output/models/amazon_toys_bge_base.npz"
+      },
+      "analysis": {
+        "n_users": 2000,
+        "K_jaccard": 10,
+        "K_lift": 10,
+        "fusion_key": "repeat_aware",
+        "rq3_1_jaccard_mean": {
+          "SASRec,ItemCF": 0.05636393255007805,
+          "SASRec,Semantic": 0.04857893555532874,
+          "ItemCF,Semantic": 0.08117294178130091
+        },
+        "rq3_2_spearman_mean": {
+          "SASRec,ItemCF": 0.09249241820699032,
+          "SASRec,Semantic": 0.12950648457732677,
+          "ItemCF,Semantic": 0.07991537519839013
+        },
+        "rq3_3_lift_attribution": {
+          "n_users": 2000,
+          "hit10": {
+            "SASRec": 0.081,
+            "ItemCF": 0.064,
+            "Semantic": 0.0525,
+            "Fusion": 0.1235
+          },
+          "n_recovered (Fusion@10 hit, SASRec@10 miss)": 112,
+          "recovered_pct": 0.056,
+          "attribution_breakdown": {
+            "itemcf_only_hit": {
+              "count": 23,
+              "pct_of_recovered": 0.20535714285714285
+            },
+            "semantic_only_hit": {
+              "count": 21,
+              "pct_of_recovered": 0.1875
+            },
+            "fusion_promotion (no expert top10)": {
+              "count": 55,
+              "pct_of_recovered": 0.49107142857142855
+            },
+            "both_sem_and_cf_hit": {
+              "count": 13,
+              "pct_of_recovered": 0.11607142857142858
+            }
+          }
+        },
+        "rq3_4_hit_set_decomposition_pct": {
+          "NONE": 86.8,
+          "only_SAS": 3.95,
+          "only_ICF": 1.8,
+          "only_SEM": 2.55,
+          "SAS_ICF": 2.2,
+          "SAS_SEM": 0.3,
+          "ICF_SEM": 0.75,
+          "ALL": 1.65
+        }
+      },
+      "recovered_pct": 0.056,
+      "hit10": {
+        "SASRec": 0.081,
+        "ItemCF": 0.064,
+        "Semantic": 0.0525,
+        "Fusion": 0.1235
+      }
+    },
+    {
+      "input": "output/results/tab_mechanism/per_user_amazon_toys_seed2.jsonl",
+      "metadata": {
+        "dataset": "amazon_toys",
+        "source_report": "output/results/tab_main/repeat_aware_toys_seed2.json",
+        "protocol": {
+          "gate_fit_split": "validation",
+          "test_used_for_training_or_selection": false,
+          "mask_history": false,
+          "ranking": "full_catalog"
+        },
+        "gate": {
+          "initial_weights": [
+            0.6,
+            0.15,
+            0.25
+          ],
+          "score_scale": 20.0,
+          "max_penalty": 0.1,
+          "seed": 2,
+          "fit_split": "validation"
+        },
+        "sample": {
+          "n_users": 2000,
+          "max_users": 2000,
+          "sampling_seed": 42,
+          "topk": 10
+        },
+        "checkpoint": "output/models/amazon_toys_sasrec_seed2.pt",
+        "itemcf": "output/models/amazon_toys_itemcf.json",
+        "semantic_embedding": "output/models/amazon_toys_bge_base.npz"
+      },
+      "analysis": {
+        "n_users": 2000,
+        "K_jaccard": 10,
+        "K_lift": 10,
+        "fusion_key": "repeat_aware",
+        "rq3_1_jaccard_mean": {
+          "SASRec,ItemCF": 0.052934432311754286,
+          "SASRec,Semantic": 0.050455990088343027,
+          "ItemCF,Semantic": 0.08117294178130091
+        },
+        "rq3_2_spearman_mean": {
+          "SASRec,ItemCF": 0.0941718066349019,
+          "SASRec,Semantic": 0.14635060086390717,
+          "ItemCF,Semantic": 0.07991537519839013
+        },
+        "rq3_3_lift_attribution": {
+          "n_users": 2000,
+          "hit10": {
+            "SASRec": 0.0825,
+            "ItemCF": 0.064,
+            "Semantic": 0.0525,
+            "Fusion": 0.1255
+          },
+          "n_recovered (Fusion@10 hit, SASRec@10 miss)": 116,
+          "recovered_pct": 0.058,
+          "attribution_breakdown": {
+            "semantic_only_hit": {
+              "count": 25,
+              "pct_of_recovered": 0.21551724137931033
+            },
+            "fusion_promotion (no expert top10)": {
+              "count": 47,
+              "pct_of_recovered": 0.4051724137931034
+            },
+            "itemcf_only_hit": {
+              "count": 27,
+              "pct_of_recovered": 0.23275862068965517
+            },
+            "both_sem_and_cf_hit": {
+              "count": 17,
+              "pct_of_recovered": 0.14655172413793102
+            }
+          }
+        },
+        "rq3_4_hit_set_decomposition_pct": {
+          "NONE": 86.15,
+          "only_SAS": 4.6,
+          "only_ICF": 2.05,
+          "only_SEM": 2.7,
+          "SAS_ICF": 1.95,
+          "SAS_SEM": 0.15,
+          "ICF_SEM": 0.85,
+          "ALL": 1.55
+        }
+      },
+      "recovered_pct": 0.058,
+      "hit10": {
+        "SASRec": 0.0825,
+        "ItemCF": 0.064,
+        "Semantic": 0.0525,
+        "Fusion": 0.1255
+      }
+    }
+  ],
+  "summary": {
+    "jaccard_at_10": {
+      "SASRec,ItemCF": {
+        "mean": 0.05389464239464239,
+        "std": 0.002156005558941304
+      },
+      "SASRec,Semantic": {
+        "mean": 0.04914977756734722,
+        "std": 0.0011342004977439137
+      },
+      "ItemCF,Semantic": {
+        "mean": 0.08117294178130091,
+        "std": 0.0
+      }
+    },
+    "full_catalog_spearman": {
+      "SASRec,ItemCF": {
+        "mean": 0.09377785917297576,
+        "std": 0.0011406826349979143
+      },
+      "SASRec,Semantic": {
+        "mean": 0.1396057197410052,
+        "std": 0.00890897478064202
+      },
+      "ItemCF,Semantic": {
+        "mean": 0.07991537519839013,
+        "std": 0.0
+      }
+    },
+    "hit_set_decomposition_percent": {
+      "NONE": {
+        "mean": 86.5,
+        "std": 0.3278719262150955
+      },
+      "only_SAS": {
+        "mean": 4.25,
+        "std": 0.32787192621509975
+      },
+      "only_ICF": {
+        "mean": 1.9666666666666666,
+        "std": 0.14433756729740632
+      },
+      "only_SEM": {
+        "mean": 2.6,
+        "std": 0.08660254037844407
+      },
+      "SAS_ICF": {
+        "mean": 2.0333333333333337,
+        "std": 0.14433756729740657
+      },
+      "SAS_SEM": {
+        "mean": 0.25,
+        "std": 0.08660254037844387
+      },
+      "ICF_SEM": {
+        "mean": 0.7333333333333334,
+        "std": 0.12583057392117916
+      },
+      "ALL": {
+        "mean": 1.6666666666666667,
+        "std": 0.12583057392117916
+      }
+    },
+    "recovered_user_rate_percent": {
+      "mean": 5.550000000000001,
+      "std": 0.27838821814150144
+    },
+    "fusion_hit10": {
+      "mean": 0.12416666666666666,
+      "std": 0.0011547005383792527
+    },
+    "expert_hit10": {
+      "SASRec": {
+        "mean": 0.082,
+        "std": 0.0008660254037844396
+      },
+      "ItemCF": {
+        "mean": 0.064,
+        "std": 0.0
+      },
+      "Semantic": {
+        "mean": 0.0525,
+        "std": 0.0
+      }
+    }
+  }
+}

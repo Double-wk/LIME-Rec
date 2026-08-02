@@ -1,0 +1,47 @@
+{
+  "dataset": "amazon_beauty",
+  "protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "method": "repeat-aware expert gate",
+  "hyperparameters": {
+    "config": "configs/amazon_beauty.json",
+    "sasrec_model": "output/models/amazon_beauty_sasrec_seed0.pt",
+    "itemcf_model": "output/models/amazon_beauty_itemcf.json",
+    "semantic_emb": "output/models/amazon_beauty_bge_base.npz",
+    "out": "output/results/tab_isolation/sasrec_cal_beauty_seed0.json",
+    "device": "cpu",
+    "batch_size": 256,
+    "epochs": 4,
+    "lr": 0.02,
+    "l2": 0.001,
+    "score_scale": 20.0,
+    "max_penalty": 0.1,
+    "seed": 0,
+    "initial_weights": "0.60,0.15,0.25",
+    "experts": "seq",
+    "disable_calibration": false,
+    "dump_per_user": "",
+    "dump_mechanism": "",
+    "mechanism_topk": 10,
+    "mechanism_max_users": null,
+    "mechanism_sample_seed": 42
+  },
+  "test_metrics": {
+    "R@5": 0.05826588561463131,
+    "N@5": 0.04143222772072933,
+    "R@10": 0.07941689397665787,
+    "N@10": 0.04827483041034743,
+    "R@20": 0.10906407905916023,
+    "N@20": 0.05573614203938163
+  },
+  "mean_test_weights": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "mean_test_penalty": 0.09876491129398346
+}

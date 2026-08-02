@@ -1,0 +1,59 @@
+{
+  "label": "fixed_penalty",
+  "dataset": "amazon_sports",
+  "source_reports": [
+    "output/results/control_fixed_penalty/control_fixed_penalty_sports_seed0.json",
+    "output/results/control_fixed_penalty/control_fixed_penalty_sports_seed1.json",
+    "output/results/control_fixed_penalty/control_fixed_penalty_sports_seed2.json"
+  ],
+  "formal_protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "fusion": {
+    "R@5": {
+      "mean": 0.04051725752383093,
+      "std": 0.0003813961805797397
+    },
+    "N@5": {
+      "mean": 0.02799879251307942,
+      "std": 0.00037266595057951164
+    },
+    "R@10": {
+      "mean": 0.0589733505627657,
+      "std": 0.0007872296030482506
+    },
+    "N@10": {
+      "mean": 0.03394758570550366,
+      "std": 0.0005093286801932934
+    },
+    "R@20": {
+      "mean": 0.08482686293237447,
+      "std": 0.001314708611168445
+    },
+    "N@20": {
+      "mean": 0.04046541719385552,
+      "std": 0.0006405922883662342
+    }
+  },
+  "mean_test_weights": {
+    "SASRec": {
+      "mean": 0.4946298102537791,
+      "std": 0.006575630481220746
+    },
+    "ItemCF": {
+      "mean": 0.17535249392191568,
+      "std": 0.00391421210752955
+    },
+    "Semantic": {
+      "mean": 0.33001670241355896,
+      "std": 0.009985922560088243
+    }
+  },
+  "mean_test_penalty": {
+    "mean": 0.09682738780975342,
+    "std": 9.181787923063846e-06
+  }
+}

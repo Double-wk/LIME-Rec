@@ -1,0 +1,30 @@
+{
+  "dataset": "amazon_beauty",
+  "source_report": "output/results/tab_main/repeat_aware_beauty_seed2.json",
+  "protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "gate": {
+    "initial_weights": [
+      0.6,
+      0.15,
+      0.25
+    ],
+    "score_scale": 20.0,
+    "max_penalty": 0.1,
+    "seed": 2,
+    "fit_split": "validation"
+  },
+  "sample": {
+    "n_users": 2000,
+    "max_users": 2000,
+    "sampling_seed": 42,
+    "topk": 10
+  },
+  "checkpoint": "output/models/amazon_beauty_sasrec_seed2.pt",
+  "itemcf": "output/models/amazon_beauty_itemcf.json",
+  "semantic_embedding": "output/models/amazon_beauty_bge_base.npz"
+}

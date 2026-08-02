@@ -1,0 +1,59 @@
+{
+  "label": "fixed_penalty",
+  "dataset": "amazon_toys",
+  "source_reports": [
+    "output/results/control_fixed_penalty/control_fixed_penalty_toys_seed0.json",
+    "output/results/control_fixed_penalty/control_fixed_penalty_toys_seed1.json",
+    "output/results/control_fixed_penalty/control_fixed_penalty_toys_seed2.json"
+  ],
+  "formal_protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "fusion": {
+    "R@5": {
+      "mean": 0.07763239233463837,
+      "std": 0.0006267012703789683
+    },
+    "N@5": {
+      "mean": 0.055265513791783814,
+      "std": 0.0005796522492209145
+    },
+    "R@10": {
+      "mean": 0.109897657806168,
+      "std": 0.0004617188563688699
+    },
+    "N@10": {
+      "mean": 0.06563714084872746,
+      "std": 0.00040129448231997634
+    },
+    "R@20": {
+      "mean": 0.15067999175767566,
+      "std": 0.0013658637526852344
+    },
+    "N@20": {
+      "mean": 0.07591391100338835,
+      "std": 0.00016484247554860142
+    }
+  },
+  "mean_test_weights": {
+    "SASRec": {
+      "mean": 0.4526156584421794,
+      "std": 0.0059440914006333905
+    },
+    "ItemCF": {
+      "mean": 0.14221665759881338,
+      "std": 0.003258981187898271
+    },
+    "Semantic": {
+      "mean": 0.40516744057337445,
+      "std": 0.009021395630772491
+    }
+  },
+  "mean_test_penalty": {
+    "mean": 0.09186166524887085,
+    "std": 2.1451083293841458e-05
+  }
+}

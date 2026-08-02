@@ -1,0 +1,388 @@
+{
+  "dataset": "amazon_beauty",
+  "formal_protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog",
+    "initial_weights": [
+      0.6,
+      0.15,
+      0.25
+    ],
+    "statistic": "mean and sample standard deviation across seeds 0, 1, 2"
+  },
+  "per_seed": [
+    {
+      "input": "output/results/tab_mechanism/per_user_amazon_beauty_seed0.jsonl",
+      "metadata": {
+        "dataset": "amazon_beauty",
+        "source_report": "output/results/tab_main/repeat_aware_beauty_seed0.json",
+        "protocol": {
+          "gate_fit_split": "validation",
+          "test_used_for_training_or_selection": false,
+          "mask_history": false,
+          "ranking": "full_catalog"
+        },
+        "gate": {
+          "initial_weights": [
+            0.6,
+            0.15,
+            0.25
+          ],
+          "score_scale": 20.0,
+          "max_penalty": 0.1,
+          "seed": 0,
+          "fit_split": "validation"
+        },
+        "sample": {
+          "n_users": 2000,
+          "max_users": 2000,
+          "sampling_seed": 42,
+          "topk": 10
+        },
+        "checkpoint": "output/models/amazon_beauty_sasrec_seed0.pt",
+        "itemcf": "output/models/amazon_beauty_itemcf.json",
+        "semantic_embedding": "output/models/amazon_beauty_bge_base.npz"
+      },
+      "analysis": {
+        "n_users": 2000,
+        "K_jaccard": 10,
+        "K_lift": 10,
+        "fusion_key": "repeat_aware",
+        "rq3_1_jaccard_mean": {
+          "SASRec,ItemCF": 0.057172732668088706,
+          "SASRec,Semantic": 0.04008804864725917,
+          "ItemCF,Semantic": 0.06350090346529975
+        },
+        "rq3_2_spearman_mean": {
+          "SASRec,ItemCF": 0.10654024056179491,
+          "SASRec,Semantic": 0.10920881529833927,
+          "ItemCF,Semantic": 0.08158957320046448
+        },
+        "rq3_3_lift_attribution": {
+          "n_users": 2000,
+          "hit10": {
+            "SASRec": 0.0785,
+            "ItemCF": 0.053,
+            "Semantic": 0.0425,
+            "Fusion": 0.0955
+          },
+          "n_recovered (Fusion@10 hit, SASRec@10 miss)": 64,
+          "recovered_pct": 0.032,
+          "attribution_breakdown": {
+            "semantic_only_hit": {
+              "count": 19,
+              "pct_of_recovered": 0.296875
+            },
+            "fusion_promotion (no expert top10)": {
+              "count": 21,
+              "pct_of_recovered": 0.328125
+            },
+            "both_sem_and_cf_hit": {
+              "count": 7,
+              "pct_of_recovered": 0.109375
+            },
+            "itemcf_only_hit": {
+              "count": 17,
+              "pct_of_recovered": 0.265625
+            }
+          }
+        },
+        "rq3_4_hit_set_decomposition_pct": {
+          "NONE": 87.45,
+          "only_SAS": 4.35,
+          "only_ICF": 1.65,
+          "only_SEM": 2.65,
+          "SAS_ICF": 2.3,
+          "SAS_SEM": 0.25,
+          "ICF_SEM": 0.4,
+          "ALL": 0.95
+        }
+      },
+      "recovered_pct": 0.032,
+      "hit10": {
+        "SASRec": 0.0785,
+        "ItemCF": 0.053,
+        "Semantic": 0.0425,
+        "Fusion": 0.0955
+      }
+    },
+    {
+      "input": "output/results/tab_mechanism/per_user_amazon_beauty_seed1.jsonl",
+      "metadata": {
+        "dataset": "amazon_beauty",
+        "source_report": "output/results/tab_main/repeat_aware_beauty_seed1.json",
+        "protocol": {
+          "gate_fit_split": "validation",
+          "test_used_for_training_or_selection": false,
+          "mask_history": false,
+          "ranking": "full_catalog"
+        },
+        "gate": {
+          "initial_weights": [
+            0.6,
+            0.15,
+            0.25
+          ],
+          "score_scale": 20.0,
+          "max_penalty": 0.1,
+          "seed": 1,
+          "fit_split": "validation"
+        },
+        "sample": {
+          "n_users": 2000,
+          "max_users": 2000,
+          "sampling_seed": 42,
+          "topk": 10
+        },
+        "checkpoint": "output/models/amazon_beauty_sasrec_seed1.pt",
+        "itemcf": "output/models/amazon_beauty_itemcf.json",
+        "semantic_embedding": "output/models/amazon_beauty_bge_base.npz"
+      },
+      "analysis": {
+        "n_users": 2000,
+        "K_jaccard": 10,
+        "K_lift": 10,
+        "fusion_key": "repeat_aware",
+        "rq3_1_jaccard_mean": {
+          "SASRec,ItemCF": 0.0509179661068206,
+          "SASRec,Semantic": 0.03740381732990092,
+          "ItemCF,Semantic": 0.06350090346529975
+        },
+        "rq3_2_spearman_mean": {
+          "SASRec,ItemCF": 0.10368792896906603,
+          "SASRec,Semantic": 0.12515111609517432,
+          "ItemCF,Semantic": 0.08158957320046448
+        },
+        "rq3_3_lift_attribution": {
+          "n_users": 2000,
+          "hit10": {
+            "SASRec": 0.0755,
+            "ItemCF": 0.053,
+            "Semantic": 0.0425,
+            "Fusion": 0.102
+          },
+          "n_recovered (Fusion@10 hit, SASRec@10 miss)": 83,
+          "recovered_pct": 0.0415,
+          "attribution_breakdown": {
+            "semantic_only_hit": {
+              "count": 19,
+              "pct_of_recovered": 0.2289156626506024
+            },
+            "fusion_promotion (no expert top10)": {
+              "count": 37,
+              "pct_of_recovered": 0.4457831325301205
+            },
+            "both_sem_and_cf_hit": {
+              "count": 8,
+              "pct_of_recovered": 0.0963855421686747
+            },
+            "itemcf_only_hit": {
+              "count": 19,
+              "pct_of_recovered": 0.2289156626506024
+            }
+          }
+        },
+        "rq3_4_hit_set_decomposition_pct": {
+          "NONE": 87.7,
+          "only_SAS": 4.1,
+          "only_ICF": 1.75,
+          "only_SEM": 2.55,
+          "SAS_ICF": 2.2,
+          "SAS_SEM": 0.35,
+          "ICF_SEM": 0.45,
+          "ALL": 0.9
+        }
+      },
+      "recovered_pct": 0.0415,
+      "hit10": {
+        "SASRec": 0.0755,
+        "ItemCF": 0.053,
+        "Semantic": 0.0425,
+        "Fusion": 0.102
+      }
+    },
+    {
+      "input": "output/results/tab_mechanism/per_user_amazon_beauty_seed2.jsonl",
+      "metadata": {
+        "dataset": "amazon_beauty",
+        "source_report": "output/results/tab_main/repeat_aware_beauty_seed2.json",
+        "protocol": {
+          "gate_fit_split": "validation",
+          "test_used_for_training_or_selection": false,
+          "mask_history": false,
+          "ranking": "full_catalog"
+        },
+        "gate": {
+          "initial_weights": [
+            0.6,
+            0.15,
+            0.25
+          ],
+          "score_scale": 20.0,
+          "max_penalty": 0.1,
+          "seed": 2,
+          "fit_split": "validation"
+        },
+        "sample": {
+          "n_users": 2000,
+          "max_users": 2000,
+          "sampling_seed": 42,
+          "topk": 10
+        },
+        "checkpoint": "output/models/amazon_beauty_sasrec_seed2.pt",
+        "itemcf": "output/models/amazon_beauty_itemcf.json",
+        "semantic_embedding": "output/models/amazon_beauty_bge_base.npz"
+      },
+      "analysis": {
+        "n_users": 2000,
+        "K_jaccard": 10,
+        "K_lift": 10,
+        "fusion_key": "repeat_aware",
+        "rq3_1_jaccard_mean": {
+          "SASRec,ItemCF": 0.055839377383882026,
+          "SASRec,Semantic": 0.04146327215096565,
+          "ItemCF,Semantic": 0.06350090346529975
+        },
+        "rq3_2_spearman_mean": {
+          "SASRec,ItemCF": 0.10502639975321554,
+          "SASRec,Semantic": 0.11183590484783416,
+          "ItemCF,Semantic": 0.08158957320046448
+        },
+        "rq3_3_lift_attribution": {
+          "n_users": 2000,
+          "hit10": {
+            "SASRec": 0.084,
+            "ItemCF": 0.053,
+            "Semantic": 0.0425,
+            "Fusion": 0.1005
+          },
+          "n_recovered (Fusion@10 hit, SASRec@10 miss)": 69,
+          "recovered_pct": 0.0345,
+          "attribution_breakdown": {
+            "semantic_only_hit": {
+              "count": 15,
+              "pct_of_recovered": 0.21739130434782608
+            },
+            "fusion_promotion (no expert top10)": {
+              "count": 29,
+              "pct_of_recovered": 0.42028985507246375
+            },
+            "both_sem_and_cf_hit": {
+              "count": 7,
+              "pct_of_recovered": 0.10144927536231885
+            },
+            "itemcf_only_hit": {
+              "count": 18,
+              "pct_of_recovered": 0.2608695652173913
+            }
+          }
+        },
+        "rq3_4_hit_set_decomposition_pct": {
+          "NONE": 86.9,
+          "only_SAS": 4.9,
+          "only_ICF": 1.8,
+          "only_SEM": 2.55,
+          "SAS_ICF": 2.15,
+          "SAS_SEM": 0.35,
+          "ICF_SEM": 0.35,
+          "ALL": 1.0
+        }
+      },
+      "recovered_pct": 0.0345,
+      "hit10": {
+        "SASRec": 0.084,
+        "ItemCF": 0.053,
+        "Semantic": 0.0425,
+        "Fusion": 0.1005
+      }
+    }
+  ],
+  "summary": {
+    "jaccard_at_10": {
+      "SASRec,ItemCF": {
+        "mean": 0.054643358719597114,
+        "std": 0.0032944455782388947
+      },
+      "SASRec,Semantic": {
+        "mean": 0.03965171270937525,
+        "std": 0.002064602903486094
+      },
+      "ItemCF,Semantic": {
+        "mean": 0.06350090346529975,
+        "std": 0.0
+      }
+    },
+    "full_catalog_spearman": {
+      "SASRec,ItemCF": {
+        "mean": 0.1050848564280255,
+        "std": 0.001427054043344632
+      },
+      "SASRec,Semantic": {
+        "mean": 0.11539861208044926,
+        "std": 0.008547449958507376
+      },
+      "ItemCF,Semantic": {
+        "mean": 0.08158957320046448,
+        "std": 0.0
+      }
+    },
+    "hit_set_decomposition_percent": {
+      "NONE": {
+        "mean": 87.35000000000001,
+        "std": 0.4092676385936209
+      },
+      "only_SAS": {
+        "mean": 4.45,
+        "std": 0.40926763859362286
+      },
+      "only_ICF": {
+        "mean": 1.7333333333333334,
+        "std": 0.0763762615825974
+      },
+      "only_SEM": {
+        "mean": 2.583333333333333,
+        "std": 0.05773502691896263
+      },
+      "SAS_ICF": {
+        "mean": 2.216666666666667,
+        "std": 0.07637626158259726
+      },
+      "SAS_SEM": {
+        "mean": 0.31666666666666665,
+        "std": 0.05773502691896256
+      },
+      "ICF_SEM": {
+        "mean": 0.4000000000000001,
+        "std": 0.05000000000000002
+      },
+      "ALL": {
+        "mean": 0.9500000000000001,
+        "std": 0.04999999999999999
+      }
+    },
+    "recovered_user_rate_percent": {
+      "mean": 3.6,
+      "std": 0.4924428900898053
+    },
+    "fusion_hit10": {
+      "mean": 0.09933333333333334,
+      "std": 0.0034034296427770203
+    },
+    "expert_hit10": {
+      "SASRec": {
+        "mean": 0.07933333333333333,
+        "std": 0.004310839052125859
+      },
+      "ItemCF": {
+        "mean": 0.053,
+        "std": 0.0
+      },
+      "Semantic": {
+        "mean": 0.0425,
+        "std": 0.0
+      }
+    }
+  }
+}

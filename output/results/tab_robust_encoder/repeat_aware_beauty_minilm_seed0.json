@@ -1,0 +1,45 @@
+{
+  "dataset": "amazon_beauty",
+  "protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "method": "repeat-aware expert gate",
+  "hyperparameters": {
+    "config": "configs/amazon_beauty.json",
+    "sasrec_model": "output/models/amazon_beauty_sasrec_seed0.pt",
+    "itemcf_model": "output/models/amazon_beauty_itemcf.json",
+    "semantic_emb": "output/models/amazon_beauty_minilm.npz",
+    "out": "output/results/tab_robust_encoder/repeat_aware_beauty_minilm_seed0.json",
+    "device": "cuda",
+    "batch_size": 256,
+    "epochs": 4,
+    "lr": 0.02,
+    "l2": 0.001,
+    "score_scale": 20.0,
+    "max_penalty": 0.1,
+    "seed": 0,
+    "initial_weights": "0.60,0.15,0.25",
+    "dump_per_user": "",
+    "dump_mechanism": "",
+    "mechanism_topk": 10,
+    "mechanism_max_users": null,
+    "mechanism_sample_seed": 42
+  },
+  "test_metrics": {
+    "R@5": 0.06926619863166839,
+    "N@5": 0.0488513195520752,
+    "R@10": 0.09851093323793766,
+    "N@10": 0.058341989445387266,
+    "R@20": 0.13437374234226176,
+    "N@20": 0.0673792495559704
+  },
+  "mean_test_weights": [
+    0.5594711303710938,
+    0.12974604964256287,
+    0.31078433990478516
+  ],
+  "mean_test_penalty": 0.09903024137020111
+}

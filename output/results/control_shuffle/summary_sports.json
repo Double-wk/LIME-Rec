@@ -1,0 +1,59 @@
+{
+  "label": "shuffled_text",
+  "dataset": "amazon_sports",
+  "source_reports": [
+    "output/results/control_shuffle/control_shuffle_embeddings_sports_seed0.json",
+    "output/results/control_shuffle/control_shuffle_embeddings_sports_seed1.json",
+    "output/results/control_shuffle/control_shuffle_embeddings_sports_seed2.json"
+  ],
+  "formal_protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "fusion": {
+    "R@5": {
+      "mean": 0.03531097252654644,
+      "std": 0.0010124625704219401
+    },
+    "N@5": {
+      "mean": 0.02485626915835996,
+      "std": 0.00040994887708763715
+    },
+    "R@10": {
+      "mean": 0.05121074217652677,
+      "std": 0.000966199422547328
+    },
+    "N@10": {
+      "mean": 0.029972951382896337,
+      "std": 0.00038355868678035805
+    },
+    "R@20": {
+      "mean": 0.07271944116710675,
+      "std": 0.0017507843148516198
+    },
+    "N@20": {
+      "mean": 0.03538564808100818,
+      "std": 0.0005833614923340741
+    }
+  },
+  "mean_test_weights": {
+    "SASRec": {
+      "mean": 0.5738914211591085,
+      "std": 0.005957148124759328
+    },
+    "ItemCF": {
+      "mean": 0.2214497079451879,
+      "std": 0.005751228962041215
+    },
+    "Semantic": {
+      "mean": 0.2046598196029663,
+      "std": 0.006888793762982501
+    }
+  },
+  "mean_test_penalty": {
+    "mean": 0.09956776847441991,
+    "std": 7.404971345187378e-06
+  }
+}

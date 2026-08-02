@@ -1,0 +1,111 @@
+{
+  "dataset": "amazon_beauty",
+  "definition": "Fusion@10 hit and matched SASRec@10 miss; singleton categories use the same no-mask scores.",
+  "per_seed": [
+    {
+      "seed": 0,
+      "input": "output/results/tab_mechanism/per_user_amazon_beauty_seed0.jsonl",
+      "summary": {
+        "n_users": 2000,
+        "n_recovered": 64,
+        "recovered_percent": 3.2,
+        "categories": {
+          "rank_promotion_no_singleton_hit": {
+            "count": 21,
+            "percent_of_recovered": 32.8125
+          },
+          "itemcf_only_hit": {
+            "count": 17,
+            "percent_of_recovered": 26.5625
+          },
+          "semantic_only_hit": {
+            "count": 19,
+            "percent_of_recovered": 29.6875
+          },
+          "itemcf_and_semantic_hit": {
+            "count": 7,
+            "percent_of_recovered": 10.9375
+          }
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "input": "output/results/tab_mechanism/per_user_amazon_beauty_seed1.jsonl",
+      "summary": {
+        "n_users": 2000,
+        "n_recovered": 83,
+        "recovered_percent": 4.15,
+        "categories": {
+          "rank_promotion_no_singleton_hit": {
+            "count": 37,
+            "percent_of_recovered": 44.57831325301205
+          },
+          "itemcf_only_hit": {
+            "count": 19,
+            "percent_of_recovered": 22.89156626506024
+          },
+          "semantic_only_hit": {
+            "count": 19,
+            "percent_of_recovered": 22.89156626506024
+          },
+          "itemcf_and_semantic_hit": {
+            "count": 8,
+            "percent_of_recovered": 9.63855421686747
+          }
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "input": "output/results/tab_mechanism/per_user_amazon_beauty_seed2.jsonl",
+      "summary": {
+        "n_users": 2000,
+        "n_recovered": 69,
+        "recovered_percent": 3.45,
+        "categories": {
+          "rank_promotion_no_singleton_hit": {
+            "count": 29,
+            "percent_of_recovered": 42.028985507246375
+          },
+          "itemcf_only_hit": {
+            "count": 18,
+            "percent_of_recovered": 26.08695652173913
+          },
+          "semantic_only_hit": {
+            "count": 15,
+            "percent_of_recovered": 21.73913043478261
+          },
+          "itemcf_and_semantic_hit": {
+            "count": 7,
+            "percent_of_recovered": 10.144927536231885
+          }
+        }
+      }
+    }
+  ],
+  "summary": {
+    "recovered_percent": {
+      "mean": 3.6,
+      "std": 0.4924428900898053
+    },
+    "category_percent_of_recovered": {
+      "rank_promotion_no_singleton_hit": {
+        "mean": 39.80659958675281,
+        "std": 6.189736647135685
+      },
+      "itemcf_only_hit": {
+        "mean": 25.180340928933123,
+        "std": 1.9963472885294609
+      },
+      "semantic_only_hit": {
+        "mean": 24.772732233280948,
+        "std": 4.295140712050344
+      },
+      "itemcf_and_semantic_hit": {
+        "mean": 10.240327251033117,
+        "std": 0.6547067023236913
+      }
+    }
+  }
+}

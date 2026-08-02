@@ -1,0 +1,14 @@
+{
+  "name": "amazon_sports",
+  "domain": "sports",
+  "interactions_path": "data/amazon/sports/train.jsonl",
+  "metadata_path": "data/amazon/sports/meta.jsonl",
+  "min_user_interactions": 5,
+  "min_item_interactions": 5,
+  "split_strategy": "leave_two_out",
+  "eval_k": [
+    5,
+    10
+  ],
+  "source": "GRAM rec_datasets"
+}

@@ -1,0 +1,83 @@
+{
+  "dataset": "yelp",
+  "protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "method": "repeat-aware expert gate",
+  "hyperparameters": {
+    "config": "configs/yelp.json",
+    "sasrec_model": "output/models/yelp_sasrec_seed0.pt",
+    "itemcf_model": "output/models/yelp_itemcf.json",
+    "semantic_emb": "output/models/yelp_minilm.npz",
+    "out": "output/results/yelp_boundary/repeat_aware_yelp_seed0.json",
+    "device": "cuda",
+    "batch_size": 256,
+    "epochs": 4,
+    "lr": 0.02,
+    "l2": 0.001,
+    "score_scale": 20.0,
+    "max_penalty": 0.1,
+    "seed": 0,
+    "initial_weights": "0.60,0.15,0.25",
+    "dump_per_user": "output/results/yelp_boundary/per_user_repeat_aware_yelp_seed0.jsonl",
+    "dump_mechanism": "",
+    "mechanism_topk": 10,
+    "mechanism_max_users": null,
+    "mechanism_sample_seed": 42
+  },
+  "test_metrics": {
+    "R@5": 0.03802043968321777,
+    "N@5": 0.02533946374112595,
+    "R@10": 0.05872301271729486,
+    "N@10": 0.03199384270616903,
+    "R@20": 0.09010548453879268,
+    "N@20": 0.03987019933743398
+  },
+  "mean_test_weights": [
+    0.604627788066864,
+    0.1528744101524353,
+    0.2424973100423813
+  ],
+  "mean_test_penalty": 0.03258948773145676,
+  "expert_test_metrics": {
+    "SASRec": {
+      "R@5": 0.03243403108672078,
+      "N@5": 0.021956252584080006,
+      "R@10": 0.049620452827708585,
+      "N@10": 0.027455190928325105,
+      "R@20": 0.07719102231277315,
+      "N@20": 0.034368853570700825
+    },
+    "ItemCF": {
+      "R@5": 0.020406821990733133,
+      "N@5": 0.012721195292696363,
+      "R@10": 0.033452729124905524,
+      "N@10": 0.016918736791237902,
+      "R@20": 0.051394959087772335,
+      "N@20": 0.021428760111950856
+    },
+    "Semantic": {
+      "R@5": 0.015181886891656534,
+      "N@5": 0.011758916848622326,
+      "R@10": 0.020965462850382834,
+      "N@10": 0.01361520847197308,
+      "R@20": 0.030002300285892677,
+      "N@20": 0.015886792088033876
+    }
+  },
+  "expert_metrics_protocol": {
+    "split": "test",
+    "mask_history": false,
+    "ranking": "full_catalog",
+    "experts": [
+      "SASRec",
+      "ItemCF",
+      "Semantic"
+    ],
+    "device": "cuda",
+    "source_report_device": "cuda"
+  }
+}

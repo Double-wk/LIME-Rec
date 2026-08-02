@@ -1,0 +1,41 @@
+{
+  "dataset": "amazon_sports",
+  "seed": 0,
+  "experts": [
+    "sem"
+  ],
+  "protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "hyperparameters": {
+    "config": "configs/amazon_sports.json",
+    "sasrec_model": "output/models/amazon_sports_sasrec_seed0.pt",
+    "itemcf_model": "output/models/amazon_sports_itemcf.json",
+    "semantic_emb": "output/models/amazon_sports_bge_base.npz",
+    "experts": "sem",
+    "out": "output/results/tab_ablation/ablation_sports_sem_seed0.json",
+    "device": "cuda",
+    "batch_size": 256,
+    "epochs": 4,
+    "lr": 0.02,
+    "l2": 0.001,
+    "score_scale": 20.0,
+    "max_penalty": 0.1,
+    "seed": 0,
+    "initial_weights": "0.60,0.15,0.25",
+    "subset_initial_weights": [
+      1.0
+    ]
+  },
+  "test_metrics": {
+    "R@5": 0.01471992808584752,
+    "N@5": 0.00975466457904047,
+    "R@10": 0.024130569133097364,
+    "N@10": 0.012767960767053433,
+    "R@20": 0.03812011910781504,
+    "N@20": 0.016276255577762477
+  }
+}

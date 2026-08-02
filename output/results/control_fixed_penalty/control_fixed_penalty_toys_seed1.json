@@ -1,0 +1,44 @@
+{
+  "dataset": "amazon_toys",
+  "seed": 1,
+  "control": "fixed_penalty",
+  "protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "method": "repeat-aware expert gate [control=fixed_penalty]",
+  "hyperparameters": {
+    "config": "configs/amazon_toys.json",
+    "sasrec_model": "outputs/models/amazon_toys_sasrec_seed1.pt",
+    "itemcf_model": "outputs/models/amazon_toys_itemcf.json",
+    "semantic_emb": "outputs/embeddings/amazon_toys_bge_base.npz",
+    "out": "outputs/control_fixed_penalty_toys_seed1.json",
+    "control": "fixed_penalty",
+    "device": "cuda",
+    "batch_size": 256,
+    "epochs": 4,
+    "lr": 0.02,
+    "l2": 0.001,
+    "score_scale": 20.0,
+    "max_penalty": 0.1,
+    "seed": 1,
+    "initial_weights": "0.60,0.15,0.25"
+  },
+  "test_metrics": {
+    "R@5": 0.07722027611786524,
+    "N@5": 0.05534246205958474,
+    "R@10": 0.10936534102616938,
+    "N@10": 0.06567708580705348,
+    "R@20": 0.150628477230579,
+    "N@20": 0.07608583958478957
+  },
+  "mean_test_weights": [
+    0.4457651674747467,
+    0.1388741433620453,
+    0.4153596758842468
+  ],
+  "mean_test_penalty": 0.0918378159403801,
+  "std_test_penalty": 7.450580596923828e-09
+}

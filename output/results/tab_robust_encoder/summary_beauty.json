@@ -1,0 +1,59 @@
+{
+  "label": "MiniLM",
+  "dataset": "amazon_beauty",
+  "source_reports": [
+    "output/results/tab_robust_encoder/repeat_aware_beauty_minilm_seed0.json",
+    "output/results/tab_robust_encoder/repeat_aware_beauty_minilm_seed1.json",
+    "output/results/tab_robust_encoder/repeat_aware_beauty_minilm_seed2.json"
+  ],
+  "formal_protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "fusion": {
+    "R@5": {
+      "mean": 0.06957921566873854,
+      "std": 0.0013029380927722955
+    },
+    "N@5": {
+      "mean": 0.04903416382641294,
+      "std": 0.0008466540758221014
+    },
+    "R@10": {
+      "mean": 0.09962885122747396,
+      "std": 0.0009704661456070608
+    },
+    "N@10": {
+      "mean": 0.05876012553375846,
+      "std": 0.0005686002638853404
+    },
+    "R@20": {
+      "mean": 0.13646052258939617,
+      "std": 0.0018514738009739627
+    },
+    "N@20": {
+      "mean": 0.06804703741441198,
+      "std": 0.0006607837176834461
+    }
+  },
+  "mean_test_weights": {
+    "SASRec": {
+      "mean": 0.5555189450581869,
+      "std": 0.006167972651289536
+    },
+    "ItemCF": {
+      "mean": 0.1347415198882421,
+      "std": 0.006110498602028231
+    },
+    "Semantic": {
+      "mean": 0.30973944067955017,
+      "std": 0.0012184313477563704
+    }
+  },
+  "mean_test_penalty": {
+    "mean": 0.09904780238866806,
+    "std": 2.1800937370116797e-05
+  }
+}

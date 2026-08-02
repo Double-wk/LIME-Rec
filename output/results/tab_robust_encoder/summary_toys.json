@@ -1,0 +1,59 @@
+{
+  "label": "MiniLM",
+  "dataset": "amazon_toys",
+  "source_reports": [
+    "output/results/tab_robust_encoder/repeat_aware_toys_minilm_seed0.json",
+    "output/results/tab_robust_encoder/repeat_aware_toys_minilm_seed1.json",
+    "output/results/tab_robust_encoder/repeat_aware_toys_minilm_seed2.json"
+  ],
+  "formal_protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "fusion": {
+    "R@5": {
+      "mean": 0.078405110241088,
+      "std": 0.0006434162372139306
+    },
+    "N@5": {
+      "mean": 0.056465689627754834,
+      "std": 0.0007111435227214999
+    },
+    "R@10": {
+      "mean": 0.10948554158939487,
+      "std": 0.0004786510016060975
+    },
+    "N@10": {
+      "mean": 0.06644291438828503,
+      "std": 0.000492263555749989
+    },
+    "R@20": {
+      "mean": 0.1471941754241363,
+      "std": 0.0013535027404999447
+    },
+    "N@20": {
+      "mean": 0.07594779035391892,
+      "std": 0.0003248347840288465
+    }
+  },
+  "mean_test_weights": {
+    "SASRec": {
+      "mean": 0.4487968583901723,
+      "std": 0.009646831889427434
+    },
+    "ItemCF": {
+      "mean": 0.1562532583872477,
+      "std": 0.0032330597315679537
+    },
+    "Semantic": {
+      "mean": 0.3949497540791829,
+      "std": 0.01194016990186229
+    }
+  },
+  "mean_test_penalty": {
+    "mean": 0.09874621282021205,
+    "std": 2.1821378607725496e-05
+  }
+}

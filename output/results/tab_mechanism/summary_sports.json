@@ -1,0 +1,388 @@
+{
+  "dataset": "amazon_sports",
+  "formal_protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog",
+    "initial_weights": [
+      0.6,
+      0.15,
+      0.25
+    ],
+    "statistic": "mean and sample standard deviation across seeds 0, 1, 2"
+  },
+  "per_seed": [
+    {
+      "input": "output/results/tab_mechanism/per_user_amazon_sports_seed0.jsonl",
+      "metadata": {
+        "dataset": "amazon_sports",
+        "source_report": "output/results/tab_main/repeat_aware_sports_seed0.json",
+        "protocol": {
+          "gate_fit_split": "validation",
+          "test_used_for_training_or_selection": false,
+          "mask_history": false,
+          "ranking": "full_catalog"
+        },
+        "gate": {
+          "initial_weights": [
+            0.6,
+            0.15,
+            0.25
+          ],
+          "score_scale": 20.0,
+          "max_penalty": 0.1,
+          "seed": 0,
+          "fit_split": "validation"
+        },
+        "sample": {
+          "n_users": 2000,
+          "max_users": 2000,
+          "sampling_seed": 42,
+          "topk": 10
+        },
+        "checkpoint": "output/models/amazon_sports_sasrec_seed0.pt",
+        "itemcf": "output/models/amazon_sports_itemcf.json",
+        "semantic_embedding": "output/models/amazon_sports_bge_base.npz"
+      },
+      "analysis": {
+        "n_users": 2000,
+        "K_jaccard": 10,
+        "K_lift": 10,
+        "fusion_key": "repeat_aware",
+        "rq3_1_jaccard_mean": {
+          "SASRec,ItemCF": 0.019141390429316125,
+          "SASRec,Semantic": 0.024879901960784313,
+          "ItemCF,Semantic": 0.047239607786434414
+        },
+        "rq3_2_spearman_mean": {
+          "SASRec,ItemCF": 0.10784591596599993,
+          "SASRec,Semantic": 0.23819241497730587,
+          "ItemCF,Semantic": 0.09383809215889492
+        },
+        "rq3_3_lift_attribution": {
+          "n_users": 2000,
+          "hit10": {
+            "SASRec": 0.039,
+            "ItemCF": 0.025,
+            "Semantic": 0.0195,
+            "Fusion": 0.0545
+          },
+          "n_recovered (Fusion@10 hit, SASRec@10 miss)": 60,
+          "recovered_pct": 0.03,
+          "attribution_breakdown": {
+            "fusion_promotion (no expert top10)": {
+              "count": 31,
+              "pct_of_recovered": 0.5166666666666667
+            },
+            "both_sem_and_cf_hit": {
+              "count": 6,
+              "pct_of_recovered": 0.1
+            },
+            "semantic_only_hit": {
+              "count": 11,
+              "pct_of_recovered": 0.18333333333333332
+            },
+            "itemcf_only_hit": {
+              "count": 12,
+              "pct_of_recovered": 0.2
+            }
+          }
+        },
+        "rq3_4_hit_set_decomposition_pct": {
+          "NONE": 93.1,
+          "only_SAS": 2.95,
+          "only_ICF": 1.25,
+          "only_SEM": 1.4,
+          "SAS_ICF": 0.75,
+          "SAS_SEM": 0.05,
+          "ICF_SEM": 0.35,
+          "ALL": 0.15
+        }
+      },
+      "recovered_pct": 0.03,
+      "hit10": {
+        "SASRec": 0.039,
+        "ItemCF": 0.025,
+        "Semantic": 0.0195,
+        "Fusion": 0.0545
+      }
+    },
+    {
+      "input": "output/results/tab_mechanism/per_user_amazon_sports_seed1.jsonl",
+      "metadata": {
+        "dataset": "amazon_sports",
+        "source_report": "output/results/tab_main/repeat_aware_sports_seed1.json",
+        "protocol": {
+          "gate_fit_split": "validation",
+          "test_used_for_training_or_selection": false,
+          "mask_history": false,
+          "ranking": "full_catalog"
+        },
+        "gate": {
+          "initial_weights": [
+            0.6,
+            0.15,
+            0.25
+          ],
+          "score_scale": 20.0,
+          "max_penalty": 0.1,
+          "seed": 1,
+          "fit_split": "validation"
+        },
+        "sample": {
+          "n_users": 2000,
+          "max_users": 2000,
+          "sampling_seed": 42,
+          "topk": 10
+        },
+        "checkpoint": "output/models/amazon_sports_sasrec_seed1.pt",
+        "itemcf": "output/models/amazon_sports_itemcf.json",
+        "semantic_embedding": "output/models/amazon_sports_bge_base.npz"
+      },
+      "analysis": {
+        "n_users": 2000,
+        "K_jaccard": 10,
+        "K_lift": 10,
+        "fusion_key": "repeat_aware",
+        "rq3_1_jaccard_mean": {
+          "SASRec,ItemCF": 0.025969512298846663,
+          "SASRec,Semantic": 0.02807765123593297,
+          "ItemCF,Semantic": 0.047239607786434414
+        },
+        "rq3_2_spearman_mean": {
+          "SASRec,ItemCF": 0.1009563269938085,
+          "SASRec,Semantic": 0.2050255747960038,
+          "ItemCF,Semantic": 0.09383809215889492
+        },
+        "rq3_3_lift_attribution": {
+          "n_users": 2000,
+          "hit10": {
+            "SASRec": 0.0415,
+            "ItemCF": 0.025,
+            "Semantic": 0.0195,
+            "Fusion": 0.0555
+          },
+          "n_recovered (Fusion@10 hit, SASRec@10 miss)": 56,
+          "recovered_pct": 0.028,
+          "attribution_breakdown": {
+            "both_sem_and_cf_hit": {
+              "count": 5,
+              "pct_of_recovered": 0.08928571428571429
+            },
+            "fusion_promotion (no expert top10)": {
+              "count": 30,
+              "pct_of_recovered": 0.5357142857142857
+            },
+            "semantic_only_hit": {
+              "count": 10,
+              "pct_of_recovered": 0.17857142857142858
+            },
+            "itemcf_only_hit": {
+              "count": 11,
+              "pct_of_recovered": 0.19642857142857142
+            }
+          }
+        },
+        "rq3_4_hit_set_decomposition_pct": {
+          "NONE": 93.25,
+          "only_SAS": 2.8,
+          "only_ICF": 1.1,
+          "only_SEM": 1.25,
+          "SAS_ICF": 0.9,
+          "SAS_SEM": 0.2,
+          "ICF_SEM": 0.25,
+          "ALL": 0.25
+        }
+      },
+      "recovered_pct": 0.028,
+      "hit10": {
+        "SASRec": 0.0415,
+        "ItemCF": 0.025,
+        "Semantic": 0.0195,
+        "Fusion": 0.0555
+      }
+    },
+    {
+      "input": "output/results/tab_mechanism/per_user_amazon_sports_seed2.jsonl",
+      "metadata": {
+        "dataset": "amazon_sports",
+        "source_report": "output/results/tab_main/repeat_aware_sports_seed2.json",
+        "protocol": {
+          "gate_fit_split": "validation",
+          "test_used_for_training_or_selection": false,
+          "mask_history": false,
+          "ranking": "full_catalog"
+        },
+        "gate": {
+          "initial_weights": [
+            0.6,
+            0.15,
+            0.25
+          ],
+          "score_scale": 20.0,
+          "max_penalty": 0.1,
+          "seed": 2,
+          "fit_split": "validation"
+        },
+        "sample": {
+          "n_users": 2000,
+          "max_users": 2000,
+          "sampling_seed": 42,
+          "topk": 10
+        },
+        "checkpoint": "output/models/amazon_sports_sasrec_seed2.pt",
+        "itemcf": "output/models/amazon_sports_itemcf.json",
+        "semantic_embedding": "output/models/amazon_sports_bge_base.npz"
+      },
+      "analysis": {
+        "n_users": 2000,
+        "K_jaccard": 10,
+        "K_lift": 10,
+        "fusion_key": "repeat_aware",
+        "rq3_1_jaccard_mean": {
+          "SASRec,ItemCF": 0.01989007586840404,
+          "SASRec,Semantic": 0.02476998869723328,
+          "ItemCF,Semantic": 0.047239607786434414
+        },
+        "rq3_2_spearman_mean": {
+          "SASRec,ItemCF": 0.10564080569012259,
+          "SASRec,Semantic": 0.23951263002473444,
+          "ItemCF,Semantic": 0.09383809215889492
+        },
+        "rq3_3_lift_attribution": {
+          "n_users": 2000,
+          "hit10": {
+            "SASRec": 0.0405,
+            "ItemCF": 0.025,
+            "Semantic": 0.0195,
+            "Fusion": 0.0555
+          },
+          "n_recovered (Fusion@10 hit, SASRec@10 miss)": 52,
+          "recovered_pct": 0.026,
+          "attribution_breakdown": {
+            "both_sem_and_cf_hit": {
+              "count": 2,
+              "pct_of_recovered": 0.038461538461538464
+            },
+            "semantic_only_hit": {
+              "count": 9,
+              "pct_of_recovered": 0.17307692307692307
+            },
+            "fusion_promotion (no expert top10)": {
+              "count": 28,
+              "pct_of_recovered": 0.5384615384615384
+            },
+            "itemcf_only_hit": {
+              "count": 13,
+              "pct_of_recovered": 0.25
+            }
+          }
+        },
+        "rq3_4_hit_set_decomposition_pct": {
+          "NONE": 93.1,
+          "only_SAS": 2.95,
+          "only_ICF": 1.15,
+          "only_SEM": 1.45,
+          "SAS_ICF": 0.85,
+          "SAS_SEM": 0.0,
+          "ICF_SEM": 0.25,
+          "ALL": 0.25
+        }
+      },
+      "recovered_pct": 0.026,
+      "hit10": {
+        "SASRec": 0.0405,
+        "ItemCF": 0.025,
+        "Semantic": 0.0195,
+        "Fusion": 0.0555
+      }
+    }
+  ],
+  "summary": {
+    "jaccard_at_10": {
+      "SASRec,ItemCF": {
+        "mean": 0.021666992865522275,
+        "std": 0.003744848138079309
+      },
+      "SASRec,Semantic": {
+        "mean": 0.025909180631316853,
+        "std": 0.001878754588467915
+      },
+      "ItemCF,Semantic": {
+        "mean": 0.047239607786434414,
+        "std": 0.0
+      }
+    },
+    "full_catalog_spearman": {
+      "SASRec,ItemCF": {
+        "mean": 0.104814349549977,
+        "std": 0.003518363449833413
+      },
+      "SASRec,Semantic": {
+        "mean": 0.2275768732660147,
+        "std": 0.019541149888261465
+      },
+      "ItemCF,Semantic": {
+        "mean": 0.09383809215889492,
+        "std": 0.0
+      }
+    },
+    "hit_set_decomposition_percent": {
+      "NONE": {
+        "mean": 93.14999999999999,
+        "std": 0.08660254037844715
+      },
+      "only_SAS": {
+        "mean": 2.9,
+        "std": 0.08660254037844407
+      },
+      "only_ICF": {
+        "mean": 1.1666666666666667,
+        "std": 0.0763762615825973
+      },
+      "only_SEM": {
+        "mean": 1.3666666666666665,
+        "std": 0.1040832999733066
+      },
+      "SAS_ICF": {
+        "mean": 0.8333333333333334,
+        "std": 0.07637626158259735
+      },
+      "SAS_SEM": {
+        "mean": 0.08333333333333333,
+        "std": 0.10408329997330665
+      },
+      "ICF_SEM": {
+        "mean": 0.2833333333333333,
+        "std": 0.05773502691896256
+      },
+      "ALL": {
+        "mean": 0.21666666666666667,
+        "std": 0.05773502691896258
+      }
+    },
+    "recovered_user_rate_percent": {
+      "mean": 2.8000000000000003,
+      "std": 0.19999999999999996
+    },
+    "fusion_hit10": {
+      "mean": 0.05516666666666667,
+      "std": 0.0005773502691896263
+    },
+    "expert_hit10": {
+      "SASRec": {
+        "mean": 0.04033333333333333,
+        "std": 0.0012583057392117926
+      },
+      "ItemCF": {
+        "mean": 0.025000000000000005,
+        "std": 4.2491873609703695e-18
+      },
+      "Semantic": {
+        "mean": 0.0195,
+        "std": 0.0
+      }
+    }
+  }
+}

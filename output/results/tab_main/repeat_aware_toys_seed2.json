@@ -1,0 +1,83 @@
+{
+  "dataset": "amazon_toys",
+  "protocol": {
+    "gate_fit_split": "validation",
+    "test_used_for_training_or_selection": false,
+    "mask_history": false,
+    "ranking": "full_catalog"
+  },
+  "method": "repeat-aware expert gate",
+  "hyperparameters": {
+    "config": "configs/amazon_toys.json",
+    "sasrec_model": "output/models/amazon_toys_sasrec_seed2.pt",
+    "itemcf_model": "output/models/amazon_toys_itemcf.json",
+    "semantic_emb": "output/models/amazon_toys_bge_base.npz",
+    "out": "output/results/tab_main/repeat_aware_toys_seed2.json",
+    "device": "cpu",
+    "batch_size": 256,
+    "epochs": 4,
+    "lr": 0.02,
+    "l2": 0.001,
+    "score_scale": 20.0,
+    "max_penalty": 0.1,
+    "seed": 2,
+    "initial_weights": "0.60,0.15,0.25",
+    "dump_per_user": "",
+    "dump_mechanism": "output/results/tab_mechanism/per_user_amazon_toys_seed2.jsonl",
+    "mechanism_topk": 10,
+    "mechanism_max_users": 2000,
+    "mechanism_sample_seed": 42
+  },
+  "test_metrics": {
+    "R@5": 0.07825056665979806,
+    "N@5": 0.0555687240331094,
+    "R@10": 0.1110138058932619,
+    "N@10": 0.06610300325676682,
+    "R@20": 0.15237997115186483,
+    "N@20": 0.0765186565882174
+  },
+  "mean_test_weights": [
+    0.4550524652004242,
+    0.14716479182243347,
+    0.39778247475624084
+  ],
+  "mean_test_penalty": 0.09907305240631104,
+  "expert_test_metrics": {
+    "SASRec": {
+      "R@5": 0.051050896352771484,
+      "N@5": 0.03353813747774506,
+      "R@10": 0.07382031732948692,
+      "N@10": 0.040891015429099196,
+      "R@20": 0.10596538223779106,
+      "N@20": 0.04899188426955952
+    },
+    "ItemCF": {
+      "R@5": 0.04677519060375026,
+      "N@5": 0.030623016883608644,
+      "R@10": 0.06738100144240676,
+      "N@10": 0.03724033499607268,
+      "R@20": 0.09262311971976098,
+      "N@20": 0.04361271748697214
+    },
+    "Semantic": {
+      "R@5": 0.025293632804450857,
+      "N@5": 0.011884917026294182,
+      "R@10": 0.05038120750051515,
+      "N@10": 0.01999976712440128,
+      "R@20": 0.08041417679785699,
+      "N@20": 0.0275722607918826
+    }
+  },
+  "expert_metrics_protocol": {
+    "split": "test",
+    "mask_history": false,
+    "ranking": "full_catalog",
+    "experts": [
+      "SASRec",
+      "ItemCF",
+      "Semantic"
+    ],
+    "device": "cuda",
+    "source_report_device": "cpu"
+  }
+}
