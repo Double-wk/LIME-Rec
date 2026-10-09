@@ -1,104 +1,168 @@
-# Is Serving-Time Language-Model Inference Necessary for Recommendation? Evidence from Generative and Agentic Settings
+# LIME-Rec
 
-Anonymous code for recovery-based mechanism auditing in recommendation.
-**LIME-Rec** replaces serving-time autoregressive LM decoding with sequential,
-collaborative, and offline semantic evidence. **DART-Rec** replaces LM-based tool
-control with deterministic fusion or fixed expert selection.
+Lightweight late fusion for recovery-based mechanism auditing in sequential recommendation.
+
+LIME-Rec combines a **SASRec sequential expert**, a **training-history ItemCF expert**,
+and **offline semantic item embeddings**. At serving time, it scores and fuses these
+sources without autoregressive language-model decoding. Pretrained language-derived
+representations are still used to construct the semantic embeddings offline.
 
 ## Overview
 
 ![Figure 1: Recovery-based mechanism auditing](assets/figure1.png)
 
-## Quick start
+The figure presents the broader generative and agentic audit framework. This repository
+contains the LIME-Rec sequential-recommendation implementation, training and evaluation
+scripts, and archived experiment reports. DART-Rec controller code, controlled GRAM
+baseline runners, and the manuscript/supplementary PDF are not included in this checkout.
 
-Run the following from this `code/` directory in a Bash shell. Python 3.10+ is required;
-the experiment commands below use CUDA.
+## Installation
+
+Python **3.10+**, Git, and `curl` are required. Run the commands below from the repository
+root in a Bash shell. Install a PyTorch build appropriate for your hardware; CUDA is
+recommended for training and embedding construction, while CPU is also supported.
 
 ```bash
+git clone https://github.com/Double-wk/LIME-Rec.git
+cd LIME-Rec
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e ".[test]"
 python -m pytest -q
+```
 
+Runtime dependencies and the optional test dependencies are declared in
+[pyproject.toml](pyproject.toml).
+
+## Quick start: Beauty pipeline
+
+The [full pipeline](workflows/run_full_pipeline.sh) downloads preprocessed benchmark
+files, builds ItemCF and semantic embeddings, trains SASRec, and evaluates a fixed
+three-expert gate:
+
+```bash
+DEVICE=cuda DATASETS="amazon_beauty" SEED=0 \
+  bash workflows/run_full_pipeline.sh
+```
+
+Use `DEVICE=cpu` for CPU execution or `DEVICE=auto` for automatic device selection in
+training and embedding construction. The workflow's shared-weight evaluation uses
+its evaluator's default CPU device.
+
+To run all three Amazon domains:
+
+```bash
+DEVICE=cuda DATASETS="amazon_beauty amazon_toys amazon_sports" SEED=0 \
+  bash workflows/run_full_pipeline.sh
+```
+
+The defaults use `BAAI/bge-base-en-v1.5` embeddings and fixed weights
+`0.50,0.20,0.30` in the order SASRec, ItemCF, Semantic. Set `RUN_GATE_SELECTION=1`
+to select global weights on validation data, or `RUN_PAIRWISE_ABLATION=1` to also
+run pairwise ablations; the latter enables gate selection automatically.
+
+Generated data, models, embeddings, and logs are written under `data/`, `outputs/`,
+and `logs/`. Existing nonempty embeddings and SASRec checkpoints are reused. For a
+fresh training run, move the corresponding generated checkpoint aside first.
+These quick-start defaults are a runnable baseline, not a complete specification
+for reproducing the archived repeat-aware results.
+
+## Data
+
+[Dataset configurations](configs) cover Amazon Beauty, Toys, Sports, and Yelp. The
+[downloader](scripts/data/download_gram_data.py) fetches sequence and item-text files
+from the GRAM repository and converts them to this project's JSONL format:
+
+```bash
 python -m scripts.data.download_gram_data beauty toys sports
-mkdir -p output_final/models
-for DOMAIN in beauty toys sports; do
-  python -m scripts.training.build_itemcf \
-    --config "configs/amazon_${DOMAIN}.json" --top-k 100 --window-size 20 \
-    --out "output_final/models/amazon_${DOMAIN}_itemcf.json"
-  python -m scripts.training.build_item_embeddings \
-    --config "configs/amazon_${DOMAIN}.json" \
-    --model BAAI/bge-base-en-v1.5 --device cuda \
-    --out "output_final/models/amazon_${DOMAIN}_bge_base.npz"
-done
+# Optional boundary dataset:
+python -m scripts.data.download_gram_data yelp
 ```
 
-For the controlled generative audit, install GRAM in a separate environment using
-its upstream instructions, then set `GRAM_PYTHON` to that environment's Python:
+Amazon data is written to `data/amazon/<domain>/`; Yelp data is written to `data/yelp/`.
+Each configuration specifies interaction/metadata paths, filtering thresholds, and a
+leave-two-out split. Downloaded sequences retain their order through synthetic
+monotonically increasing timestamps. Datasets and model weights are not bundled.
+
+## Repeat-aware fusion
+
+The [repeat-aware gate](scripts/evaluation/run_repeat_aware_gate.py) learns user-specific
+expert weights and a bounded penalty for previously interacted items on the validation
+split, then evaluates once on test. It uses full-catalog ranking with history items
+eligible for recommendation. This differs from the quick-start shared-weight evaluator,
+which masks history items by default.
+
+After the Beauty pipeline has created its three expert assets, run:
 
 ```bash
-git clone https://github.com/skleee/GRAM.git external/GRAM
-export GRAM_PYTHON=/path/to/gram/environment/bin/python
-
-# First check: LIME-Rec matched-20 runs and GRAM Beauty seed 0.
-DEVICE=cuda GRAM_DATASETS="beauty" GRAM_SEEDS="0" \
-  bash workflows/run_controlled_gram.sh
-
-# After alignment, import, and evaluation pass, run all domains and seeds.
-DEVICE=cuda GRAM_DATASETS="beauty toys sports" GRAM_SEEDS="0 1 2" \
-  bash workflows/run_controlled_gram.sh
-python -m scripts.evaluation.recovery_audit_gram \
-  --predictions-dir output_final/results/controlled_gram/predictions \
-  --n-resamples 10000 --seed 2027 \
-  --out-json output_final/results/controlled_gram/recovery_audit_gram.json
+python -m scripts.evaluation.run_repeat_aware_gate \
+  --config configs/amazon_beauty.json \
+  --sasrec-model outputs/models/amazon_beauty_sasrec.pt \
+  --itemcf-model outputs/models/amazon_beauty_itemcf.json \
+  --semantic-emb outputs/embeddings/amazon_beauty_bge_base.npz \
+  --device cuda --seed 0 \
+  --out outputs/repeat_aware_beauty_seed0.json
 ```
 
-After these experts are available, start the limited-tool pipeline smoke check:
+Use `--device cpu` for CPU evaluation. This example fits a new gate using the
+quick-start checkpoint; its output is a new local run. Archived results also depend
+on their original checkpoints, training settings, and evaluation protocol.
+
+## Multiple seeds
+
+Prepare data and embeddings with the full pipeline first, then use the
+[multi-seed workflow](workflows/run_multiseed.sh):
 
 ```bash
-bash scripts/agentic/smoke_budgeted.sh
+DEVICE=cuda DATASETS="amazon_beauty amazon_toys amazon_sports" \
+  SEEDS="0 1 2" bash workflows/run_multiseed.sh
 ```
 
-This smoke check evaluates deterministic baselines without calling an LM.
-Full controller training and serving commands are in
-[the limited-tool guide](scripts/agentic/BUDGETED_TOOLS.md); upstream baseline
-compatibility instructions are in [the patch guide](patches/README.md).
-The working directory is this `code/` directory; the original `plan.md` mentioned
-in the guide is not bundled.
+This workflow trains seed-specific SASRec checkpoints and evaluates fixed shared
+weights. It writes reports to `output/results/supplementary/multiseed/` and summarizes
+them when at least two seeds are provided. It does not fit the repeat-aware gate;
+run that evaluator separately with the desired seed-specific checkpoint.
 
-## Main results and conclusions
+## Archived results
 
-The paper reports the following results:
+The tracked [main summary](output/results/tab_main/summary.json) records the following
+repeat-aware fusion results as mean ± sample standard deviation across seeds 0, 1, 2:
 
-| Setting | Main finding |
+| Dataset | Recall@10 | NDCG@10 |
+|---|---:|---:|
+| Amazon Beauty | 0.09964 ± 0.00090 | 0.05874 ± 0.00047 |
+| Amazon Toys | 0.11053 ± 0.00049 | 0.06636 ± 0.00026 |
+| Amazon Sports | 0.05927 ± 0.00079 | 0.03411 ± 0.00053 |
+
+The summary identifies validation-only gate fitting, full-catalog ranking, no hard
+history masking, BGE-base embeddings, and initial weights `0.60,0.15,0.25`. These are
+archived reports, not results regenerated by the quick-start commands above.
+
+Additional artifacts are available in [output/results](output/results), including
+expert-subset ablations, mechanism and isolation analyses, bootstrap intervals,
+semantic-shuffling and fixed-penalty controls, encoder robustness, and Yelp boundary
+runs. The [checkpoint manifest](output/provenance/checkpoint_manifest.json) records
+historical asset hashes and training metadata; the referenced weights and training
+logs are not bundled.
+
+Recovery comparisons apply to the tested protocols. Offline semantic evidence remains
+part of the system, and recommendation accuracy alone does not establish conversational
+quality, explanation quality, or long-horizon utility.
+
+## Repository map
+
+| Path | Contents |
 |---|---|
-| Generative recommendation | LIME-Rec recovers GRAM, TIGER, and LIGER on the tested Amazon protocols; up to **15.2%** relative R@10 gain over GRAM. |
-| All expert outputs available | On 1,000 Beauty users, deterministic fusion reaches R@10 **0.112**, versus **0.096** for imitation-adapted Qwen3-4B (**16.7%** relative gain). |
-| At most two tool calls | Fixed expert selection has identical per-user Hit@10 outcomes in **17 of 18** dataset–seed–controller comparisons. |
+| [lime_rec](lime_rec) | Data loading, SASRec, expert scoring, and evaluation helpers |
+| [configs](configs) | Dataset configurations |
+| [scripts/data](scripts/data) | Benchmark download and conversion |
+| [scripts/training](scripts/training) | SASRec training, ItemCF construction, and offline embeddings |
+| [scripts/evaluation](scripts/evaluation) | Fusion, gates, ablations, controls, and result summaries |
+| [workflows](workflows) | Full-pipeline and multi-seed Bash entry points |
+| [tests](tests) | Unit tests for models, ItemCF, evaluation, and complementarity |
+| [output](output) | Archived experiment reports and provenance |
+| [assets](assets) | README overview figure |
 
-The results show that the tested recommendation accuracy can often be recovered
-without the audited serving-time LM mechanism. Offline pretrained semantic
-representations remain in use. Recovery is not universal: Yelp and some long-history
-Sports regimes fail the reported recovery criteria. Failed recovery leaves inference
-necessity unresolved; top-10 accuracy also does not establish conversational quality,
-explanations, diversity, or long-horizon utility.
+## License
 
-See [the supplementary PDF](../附件/supplementary.pdf) for protocols and detailed
-results. This package contains source code and Figure 1, with no datasets, model
-weights, or result files. Running the commands generates new artifacts locally;
-no experiments were rerun to prepare the package.
-
-## Citation
-
-Please cite the paper if you use this code or framework. This provisional entry
-matches the anonymous manuscript and its year metadata; it does not imply publication.
-Replace it with the official bibliographic record when available.
-
-```bibtex
-@misc{anonymous2027servingtime,
-  author = {{Anonymous Submission}},
-  title  = {Is Serving-Time Language-Model Inference Necessary for Recommendation? Evidence from Generative and Agentic Settings},
-  year   = {2027},
-  note   = {Anonymous manuscript}
-}
-```
+The code is distributed under the [Apache License 2.0](LICENSE).
