@@ -33,7 +33,7 @@ read -r -a SEED_LIST <<< "$SEEDS"
 [ "${#DATASET_LIST[@]}" -gt 0 ] || { echo "[error] DATASETS is empty." >&2; exit 2; }
 [ "${#SEED_LIST[@]}" -gt 0 ] || { echo "[error] SEEDS is empty." >&2; exit 2; }
 
-REPORT_DIR="output/results/supplementary/multiseed"
+REPORT_DIR="output_final/results/supplementary/multiseed"
 mkdir -p logs outputs/models outputs/embeddings "$REPORT_DIR"
 
 require_file() {

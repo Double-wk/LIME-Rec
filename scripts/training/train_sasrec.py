@@ -422,6 +422,7 @@ def main():
         interactions_path=config["interactions_path"],
         min_user_interactions=config.get("min_user_interactions", 5),
         min_item_interactions=config.get("min_item_interactions", 5),
+        split_manifest=config.get("split_manifest"),
     )
     print(f"[data] users={ds.num_users} items={ds.num_items}", flush=True)
 
@@ -437,9 +438,12 @@ def main():
         history = ds.history_by_user.get(u, [])
         seq = [item_to_idx[i] for i in history if i in item_to_idx]
         valid_item = ds.valid_by_user.get(u)
+        if config.get("split_manifest"):
+            train_seqs.append(seq)
         if valid_item and valid_item in item_to_idx:
             # Training sequence includes everything up to (not including) valid.
-            train_seqs.append(seq)
+            if not config.get("split_manifest"):
+                train_seqs.append(seq)
             # Validation: input=seq, target=valid_item_idx.
             valid_seqs.append(seq)
             valid_targets.append(item_to_idx[valid_item])

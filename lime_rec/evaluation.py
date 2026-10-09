@@ -29,6 +29,7 @@ def load_configured_dataset(config_path: str | Path) -> Dataset:
         metadata_path=metadata,
         min_user_interactions=config.get("min_user_interactions", 5),
         min_item_interactions=config.get("min_item_interactions", 5),
+        split_manifest=config.get("split_manifest"),
     )
 
 

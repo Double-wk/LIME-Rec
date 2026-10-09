@@ -1,0 +1,11 @@
+{
+  "name": "ml1m",
+  "domain": "movielens",
+  "interactions_path": "data/ml1m/train.jsonl",
+  "metadata_path": "data/ml1m/meta.jsonl",
+  "min_user_interactions": 5,
+  "min_item_interactions": 5,
+  "split_strategy": "leave_two_out",
+  "eval_k": [5, 10, 20],
+  "source": "MovieLens-1M (GroupLens 2003)"
+}

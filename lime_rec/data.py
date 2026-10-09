@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import ast
 import gzip
+import hashlib
 import json
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
@@ -46,7 +47,33 @@ def load_dataset(
     metadata_path: Optional[str] = None,
     min_user_interactions: int = 5,
     min_item_interactions: int = 5,
+    split_manifest: Optional[str] = None,
 ) -> Dataset:
+    if split_manifest is not None:
+        spec = json.loads(Path(split_manifest).read_text())
+        digest = hashlib.sha256()
+        with Path(interactions_path).open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(chunk)
+        if spec["dataset"] != name or digest.hexdigest() != spec["source_sha256"]:
+            raise ValueError("temporal split dataset/source hash mismatch")
+        history, valid, test = spec["history_by_user"], spec["valid_by_user"], spec["test_by_user"]
+        items = spec["item_ids"]
+        if set(valid) != set(test) or not set(valid) <= set(history):
+            raise ValueError("temporal split users do not align")
+        item_set = set(items)
+        if len(items) != len(item_set) or items != sorted(items):
+            raise ValueError("temporal catalog must be unique and sorted")
+        if any(i not in item_set for i in list(valid.values()) + list(test.values())):
+            raise ValueError("temporal target outside training catalog")
+        if any(i not in item_set for h in history.values() for i in h):
+            raise ValueError("temporal training item outside catalog")
+        counts = Counter(i for h in history.values() for i in h)
+        maximum = max(counts.values(), default=1)
+        return Dataset(name=name, user_ids=sorted(history), item_ids=items,
+                       history_by_user=history, valid_by_user=valid, test_by_user=test,
+                       item_popularity={i: counts[i] / maximum for i in items},
+                       item_text=_read_metadata(Path(metadata_path)) if metadata_path else {})
     rows = list(_read_interactions(Path(interactions_path)))
     rows = _iterative_kcore(rows, min_user_interactions, min_item_interactions)
     history_by_user, valid_by_user, test_by_user = _leave_two_out(rows)

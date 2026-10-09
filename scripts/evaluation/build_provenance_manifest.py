@@ -1,6 +1,6 @@
 """Create a hash-backed manifest for formal experiment inputs.
 
-The manifest is deliberately generated only from ``output``.  It records
+The manifest is deliberately generated only from ``output_final``.  It records
 the training metadata embedded in every SASRec checkpoint plus hashes of every
 formal model asset and training log, so results never need to rely on mutable
 paths under ``outputs``.
@@ -62,8 +62,8 @@ def static_asset_entry(path: Path, root: Path) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--root", default="output")
-    parser.add_argument("--out", default="output/provenance/checkpoint_manifest.json")
+    parser.add_argument("--root", default="output_final")
+    parser.add_argument("--out", default="output_final/provenance/checkpoint_manifest.json")
     args = parser.parse_args()
 
     root = Path(args.root).resolve()

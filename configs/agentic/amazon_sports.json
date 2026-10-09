@@ -1,0 +1,1 @@
+{"dataset_config":"configs/amazon_sports.json","sasrec_model":"output_final/models/amazon_sports_sasrec_seed0.pt","itemcf_model":"output_final/models/amazon_sports_itemcf.json","semantic_emb":"output_final/models/amazon_sports_bge_base.npz","candidate_per_expert":20,"sample_seed":2027}

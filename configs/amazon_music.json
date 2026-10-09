@@ -1,0 +1,14 @@
+{
+  "name": "amazon_music",
+  "domain": "amazon-music",
+  "interactions_path": "data/amazon/music/train.jsonl",
+  "metadata_path": "data/amazon/music/meta.jsonl",
+  "min_user_interactions": 5,
+  "min_item_interactions": 5,
+  "split_strategy": "leave_two_out",
+  "eval_k": [
+    5,
+    10
+  ],
+  "source": "McAuley UCSD Amazon-2014 CDs_and_Vinyl 5-core (no GRAM/LIGER reference)"
+}

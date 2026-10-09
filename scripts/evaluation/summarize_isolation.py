@@ -1,7 +1,7 @@
 """Aggregate the calibration/fusion isolation ablation over three seeds.
 
 Reads the per-seed reports written by run_repeat_aware_gate.py under
-output/results/tab_isolation and prints a compact R@10/N@10 table with
+output_final/results/tab_isolation and prints a compact R@10/N@10 table with
 the seed mean and sample standard deviation for each of the four configurations:
 
   1. sasrec_nocal   -- bare SASRec, no history calibration
@@ -21,7 +21,7 @@ from pathlib import Path
 
 import numpy as np
 
-OUT = Path("output/results/tab_isolation")
+OUT = Path("output_final/results/tab_isolation")
 CONFIGS = ["sasrec_nocal", "sasrec_cal", "fusion_nocal", "fusion_full"]
 DATASETS = ["beauty", "toys", "sports"]
 SEEDS = [0, 1, 2]

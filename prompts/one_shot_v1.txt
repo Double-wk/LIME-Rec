@@ -1,0 +1,5 @@
+Rank the opaque candidate item IDs using only the supplied outputs of the three
+expert tools and history-membership flags. No future interaction, evaluation
+label, raw item text, or hidden tool score is available. Return exactly one JSON
+object of the form {"action":"finish","ranking":[...]} containing at least ten
+unique IDs from the candidate pool.

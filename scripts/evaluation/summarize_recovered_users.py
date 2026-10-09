@@ -81,7 +81,7 @@ def _plot(report: dict, output: Path) -> None:
     bars = ax.bar(labels, values, color=["#7f8c8d", "#4c78a8", "#59a14f", "#f28e2b"])
     ax.set_ylabel("Percent of recovered users")
     ax.set_ylim(0, max(values + [1]) * 1.25)
-    ax.set_title("Beauty seed 0: formal repeat-aware fusion")
+    ax.set_title("Beauty, seed 0")
     for bar, value in zip(bars, values):
         ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f"{value:.1f}%",
                 ha="center", va="bottom", fontsize=9)

@@ -1,0 +1,157 @@
+diff --git a/src/arguments.py b/src/arguments.py
+index 6ebfb7c..06eca1b 100644
+--- a/src/arguments.py
++++ b/src/arguments.py
+@@ -321,6 +321,13 @@ def create_parser() -> argparse.ArgumentParser:
+         default=1,
+         help="Whether to append lexical id to the history sequence",
+     )
++    parser.add_argument(
++        "--mask_history_items",
++        type=int,
++        default=0,
++        help="Whether to natively exclude the user's history-window items from "
++        "the constrained decoding candidate trie during test/validation",
++    )
+     return parser
+ 
+ 
+diff --git a/src/main_generative_gram.py b/src/main_generative_gram.py
+index d73953d..65a8542 100755
+--- a/src/main_generative_gram.py
++++ b/src/main_generative_gram.py
+@@ -125,6 +125,10 @@ def distributed_main(local_rank, args):
+         if local_rank == 0:
+             logging.info(f"Train done ... Load model from {runner.cur_model_path}")
+         runner.test(runner.cur_model_path)
++    else:
++        if local_rank == 0:
++            logging.info(f"Test-only run ... Load model from {args.rec_model_path}")
++        runner.test(args.rec_model_path)
+     dist.barrier()
+     dist.destroy_process_group()
+ 
+diff --git a/src/runner/distributed_runner_gram.py b/src/runner/distributed_runner_gram.py
+index a668c48..6de839d 100755
+--- a/src/runner/distributed_runner_gram.py
++++ b/src/runner/distributed_runner_gram.py
+@@ -625,11 +625,17 @@ class DistributedRunnerGRAM:
+                         str(score) for score in list(metrics_per_seq)
+                     ]
+                     user_id = batch["user_ids"][0]
++                    # Sanitize embedded newlines: a few decoded strings contain
++                    # literal \n/\r which would otherwise split TSV rows and drop
++                    # users from the export. Newline-containing strings can never
++                    # match a candidate lex_id at import (mapping is line-based),
++                    # so evaluation semantics are unchanged.
++                    _clean = lambda s: str(s).replace("\n", " ").replace("\r", " ")
+                     write_results = [
+                         str(user_id),
+                         "\t".join(metrics_per_seq_tmp),
+-                        gold_sents[0],
+-                        "||".join(generated_sents),
++                        _clean(gold_sents[0]),
++                        "||".join(_clean(s) for s in generated_sents),
+                         "||".join(prediction_scores_tmp),
+                     ]
+                     pred_file.write("\t".join(write_results) + "\n")
+@@ -750,6 +756,54 @@ class DistributedRunnerGRAM:
+ 
+             prefix_allowed_tokens = gt.prefix_allowed_tokens_fn(candidate_trie)
+ 
++            # Native repeat-masked decoding: per-user candidate constraints that
++            # exclude the items present in the user's (capped) history window.
++            mask_history_items = bool(getattr(self.args, "mask_history_items", 0))
++            counted_global_trie = None
++            user_blocked_sequences = {}
++            if mask_history_items:
++                import utils.generation_trie_masked as gtm
++
++                counted_global_trie = gtm.CountedTrie(encoded_candidates)
++                dataset_obj = testloader.dataset
++                drop_last = 1 if mode == "test" else 2
++
++                def encode_lex_id(lex_id):
++                    if self.args.item_id_type == "t5_token":
++                        return (
++                            [0]
++                            + self.tokenizer.convert_tokens_to_ids(lex_id.split(" "))
++                            + [1]
++                        )
++                    elif self.args.item_id_type == "split":
++                        tmp_tokens = self.tokenizer.encode(lex_id)
++                        encoded = [0]
++                        for tok in tmp_tokens:
++                            if tok in [1820, 9175]:
++                                continue
++                            encoded.append(tok)
++                        return encoded
++                    else:
++                        return [0] + self.tokenizer.encode(f"{lex_id}")
++
++                for user_id, items in dataset_obj.user_seq_dict.items():
++                    history_items = items[:-drop_last]
++                    if self.args.max_his > 0:
++                        history_items = history_items[-self.args.max_his:]
++                    blocked = []
++                    for item in history_items:
++                        lex_id = dataset_obj.item2lexid.get(item)
++                        if lex_id is None:
++                            continue
++                        blocked.append(encode_lex_id(lex_id))
++                    user_blocked_sequences[user_id] = blocked
++                if self.rank == 0:
++                    logging.info(
++                        f"[mask_history_items] native repeat-masked decoding for "
++                        f"{len(user_blocked_sequences)} users "
++                        f"(drop_last={drop_last}, max_his={self.args.max_his})"
++                    )
++
+             metrics_res = np.array([0.0] * len(self.metrics))
+             logging_str = ""
+             for batch in tqdm(testloader, dynamic_ncols=True):
+@@ -772,11 +826,23 @@ class DistributedRunnerGRAM:
+                         50  # TODO max_length를 args에서 가져오는 것으로 수정 필요
+                     )
+ 
++                if mask_history_items:
++                    import utils.generation_trie_masked as gtm
++
++                    blocked_trie = gtm.CountedTrie(
++                        user_blocked_sequences.get(batch["user_ids"][0], [])
++                    )
++                    active_prefix_allowed_tokens = gtm.masked_prefix_allowed_tokens_fn(
++                        counted_global_trie, blocked_trie
++                    )
++                else:
++                    active_prefix_allowed_tokens = prefix_allowed_tokens
++
+                 prediction = self.model_rec.module.generate(
+                     input_ids=input_ids,
+                     attention_mask=attention_mask,
+                     max_length=max_length,
+-                    prefix_allowed_tokens_fn=prefix_allowed_tokens,
++                    prefix_allowed_tokens_fn=active_prefix_allowed_tokens,
+                     num_beams=self.generate_num,
+                     num_return_sequences=self.generate_num,
+                     output_scores=True,
+@@ -816,11 +882,17 @@ class DistributedRunnerGRAM:
+                         str(score) for score in list(metrics_per_seq)
+                     ]
+                     user_id = batch["user_ids"][0]
++                    # Sanitize embedded newlines: a few decoded strings contain
++                    # literal \n/\r which would otherwise split TSV rows and drop
++                    # users from the export. Newline-containing strings can never
++                    # match a candidate lex_id at import (mapping is line-based),
++                    # so evaluation semantics are unchanged.
++                    _clean = lambda s: str(s).replace("\n", " ").replace("\r", " ")
+                     write_results = [
+                         str(user_id),
+                         "\t".join(metrics_per_seq_tmp),
+-                        gold_sents[0],
+-                        "||".join(generated_sents),
++                        _clean(gold_sents[0]),
++                        "||".join(_clean(s) for s in generated_sents),
+                         "||".join(prediction_scores_tmp),
+                     ]
+                     pred_file.write("\t".join(write_results) + "\n")

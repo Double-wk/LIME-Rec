@@ -8,8 +8,8 @@ replication rather than a population estimate.
 
 Example:
   python -m scripts.evaluation.summarize_multiseed \
-    --inputs output/results/supplementary/multiseed/multiseed_shared_weight_bge_base_seed{0,1,2}.json \
-    --out output/results/supplementary/multiseed/multiseed_shared_weight_bge_base_summary.json
+    --inputs output_final/results/supplementary/multiseed/multiseed_shared_weight_bge_base_seed{0,1,2}.json \
+    --out output_final/results/supplementary/multiseed/multiseed_shared_weight_bge_base_summary.json
 """
 from __future__ import annotations
 

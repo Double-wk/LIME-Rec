@@ -1,0 +1,119 @@
+diff -ru '--exclude=checkpoint_lime' '--exclude=ckpt_lime' '--exclude=data' '--exclude=data_lime' '--exclude=checkpoint' '--exclude=*.pyc' '--exclude=__pycache__' /tmp/letter_fresh/LETTER-master/LETTER-TIGER/finetune.py external/LETTER/LETTER-TIGER/finetune.py
+--- /tmp/letter_fresh/LETTER-master/LETTER-TIGER/finetune.py	2025-01-02 00:43:17.000000000 +0800
++++ external/LETTER/LETTER-TIGER/finetune.py	2026-09-22 02:25:49.302669718 +0800
+@@ -1,7 +1,7 @@
+ import argparse
+ import os
+ 
+-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
++os.environ.setdefault("CUDA_VISIBLE_DEVICES", "0,1")
+ import sys
+ from typing import List
+ from transformers import EarlyStoppingCallback
+diff -ru '--exclude=checkpoint_lime' '--exclude=ckpt_lime' '--exclude=data' '--exclude=data_lime' '--exclude=checkpoint' '--exclude=*.pyc' '--exclude=__pycache__' /tmp/letter_fresh/LETTER-master/LETTER-TIGER/test.py external/LETTER/LETTER-TIGER/test.py
+--- /tmp/letter_fresh/LETTER-master/LETTER-TIGER/test.py	2025-01-02 00:43:17.000000000 +0800
++++ external/LETTER/LETTER-TIGER/test.py	2026-09-22 02:25:49.350122413 +0800
+@@ -1,7 +1,7 @@
+ import argparse
+ import json
+ import os
+-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
++os.environ.setdefault("CUDA_VISIBLE_DEVICES", "0,1,2,3")
+ import sys
+ from typing import List
+ 
+diff -ru '--exclude=checkpoint_lime' '--exclude=ckpt_lime' '--exclude=data' '--exclude=data_lime' '--exclude=checkpoint' '--exclude=*.pyc' '--exclude=__pycache__' /tmp/letter_fresh/LETTER-master/RQ-VAE/main.py external/LETTER/RQ-VAE/main.py
+--- /tmp/letter_fresh/LETTER-master/RQ-VAE/main.py	2025-01-02 00:43:17.000000000 +0800
++++ external/LETTER/RQ-VAE/main.py	2026-09-22 01:41:02.821297500 +0800
+@@ -4,7 +4,10 @@
+ import numpy as np
+ from time import time
+ import logging
+-import wandb
++try:
++    import wandb  # noqa: F401  (unused at runtime; keep parity with upstream)
++except ImportError:  # pragma: no cover
++    wandb = None
+ from torch.utils.data import DataLoader
+ 
+ from datasets import EmbDataset
+@@ -65,7 +68,12 @@
+ 
+     print(args)
+     logging.basicConfig(level=logging.DEBUG)
+-    cf_emb = torch.load(args.cf_emb).squeeze().detach().numpy()
++    if args.alpha > 0:
++        cf_emb = torch.load(args.cf_emb).squeeze().detach().numpy()
++    else:
++        # Vanilla TIGER tokenizer: no collaborative regularization, so the CF
++        # embedding is never used; skip loading it.
++        cf_emb = None
+ 
+     """build dataset"""
+     data = EmbDataset(args.data_path)
+diff -ru '--exclude=checkpoint_lime' '--exclude=ckpt_lime' '--exclude=data' '--exclude=data_lime' '--exclude=checkpoint' '--exclude=*.pyc' '--exclude=__pycache__' /tmp/letter_fresh/LETTER-master/RQ-VAE/models/rqvae.py external/LETTER/RQ-VAE/models/rqvae.py
+--- /tmp/letter_fresh/LETTER-master/RQ-VAE/models/rqvae.py	2025-01-02 00:43:17.000000000 +0800
++++ external/LETTER/RQ-VAE/models/rqvae.py	2026-09-22 02:28:58.581079701 +0800
+@@ -2,7 +2,10 @@
+ import torch
+ from torch import nn
+ from torch.nn import functional as F
+-import wandb
++try:
++    import wandb  # noqa: F401  (unused at runtime)
++except ImportError:
++    wandb = None
+ import random
+ import collections
+ from .layers import MLPLayers
+@@ -99,11 +102,14 @@
+ 
+         rqvae_n_diversity_loss = loss_recon + self.quant_loss_weight * quant_loss
+ 
+-        # CF_Loss
+-        cf_embedding_in_batch = self.cf_embedding[emb_idx]
+-        cf_embedding_in_batch = torch.from_numpy(cf_embedding_in_batch).to(dense_out.device)
+-        cf_loss = self.CF_loss(dense_out, cf_embedding_in_batch)
++        # CF_Loss (skipped for the vanilla TIGER tokenizer: alpha == 0)
++        if self.alpha > 0:
++            cf_embedding_in_batch = self.cf_embedding[emb_idx]
++            cf_embedding_in_batch = torch.from_numpy(cf_embedding_in_batch).to(dense_out.device)
++            cf_loss = self.CF_loss(dense_out, cf_embedding_in_batch)
++        else:
++            cf_loss = 0
+ 
+-        total_loss = rqvae_n_diversity_loss + self.alpha * cf_loss
++        total_loss = rqvae_n_diversity_loss + self.alpha * cf_loss if self.alpha > 0 else rqvae_n_diversity_loss
+ 
+         return total_loss, cf_loss, loss_recon, quant_loss
+\ No newline at end of file
+diff -ru '--exclude=checkpoint_lime' '--exclude=ckpt_lime' '--exclude=data' '--exclude=data_lime' '--exclude=checkpoint' '--exclude=*.pyc' '--exclude=__pycache__' /tmp/letter_fresh/LETTER-master/RQ-VAE/models/vq.py external/LETTER/RQ-VAE/models/vq.py
+--- /tmp/letter_fresh/LETTER-master/RQ-VAE/models/vq.py	2025-01-02 00:43:17.000000000 +0800
++++ external/LETTER/RQ-VAE/models/vq.py	2026-09-22 02:29:15.478306862 +0800
+@@ -3,7 +3,10 @@
+ import torch.nn.functional as F
+ from .layers import kmeans, sinkhorn_algorithm
+ import random
+-import wandb
++try:
++    import wandb  # noqa: F401  (unused at runtime)
++except ImportError:
++    wandb = None
+ 
+ 
+ class VectorQuantizer(nn.Module):
+diff -ru '--exclude=checkpoint_lime' '--exclude=ckpt_lime' '--exclude=data' '--exclude=data_lime' '--exclude=checkpoint' '--exclude=*.pyc' '--exclude=__pycache__' /tmp/letter_fresh/LETTER-master/RQ-VAE/trainer.py external/LETTER/RQ-VAE/trainer.py
+--- /tmp/letter_fresh/LETTER-master/RQ-VAE/trainer.py	2025-01-02 00:43:17.000000000 +0800
++++ external/LETTER/RQ-VAE/trainer.py	2026-09-22 01:41:49.880624556 +0800
+@@ -10,7 +10,10 @@
+ import torch.nn.functional as F
+ from utils import ensure_dir,set_color,get_local_time
+ import os
+-import wandb
++try:
++    import wandb  # noqa: F401  (unused at runtime; keep parity with upstream)
++except ImportError:  # pragma: no cover
++    wandb = None
+ from datasets import EmbDataset
+ from torch.utils.data import DataLoader
+ 

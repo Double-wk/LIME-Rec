@@ -5,17 +5,20 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "lime-rec"
 version = "0.1.0"
-description = "LIME-Rec: Lightweight Late-Fusion Audit for Sequential Recommendation"
+description = "Is Serving-Time Language-Model Inference Necessary for Recommendation? Evidence from Generative and Agentic Settings"
 requires-python = ">=3.10"
 license = {text = "Apache-2.0"}
-readme = "README.md"
+readme = "readme.md"
 dependencies = [
     "datasets>=4.5.0",
     "numpy>=1.23",
     "requests>=2.28",
     "scipy>=1.10",
     "sentence-transformers>=2.2",
-    "torch>=2.0",
+    # 钉死而非 >=：本机驱动 525.125.06 只到 CUDA 12.0，且 V100 是 sm_70。
+    # torch 2.9+ 按 CUDA 13 编译（需驱动 580+，且已砍 sm_70），装上 GPU 会静默失效。
+    # 下限来自 transformers 的 torch>=2.5。可用窗口只有 2.5~2.6，2.5.1 已实测通过。
+    "torch==2.5.1",
     "threadpoolctl>=3.0",
     "tqdm>=4.66",
 ]

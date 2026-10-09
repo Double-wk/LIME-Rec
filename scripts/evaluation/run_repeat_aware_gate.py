@@ -75,8 +75,13 @@ def batch_scores(evaluator: ExpertEvaluator, batch, device: str):
 
 def features(scores: torch.Tensor, lengths: torch.Tensor, history: torch.Tensor) -> torch.Tensor:
     top2 = torch.topk(scores, k=2, dim=2).values
-    means = scores.mean(dim=2)
-    stds = scores.std(dim=2)
+    # 掩码感知统计：mask_history=true 时被屏蔽项为 -1e9，直接平均会污染 confidence/std。
+    # 主协议（无掩码，分数均在 [0,1] 量级）下 valid 恒真，行为与原实现逐位一致。
+    valid = scores > -1e8
+    counts = valid.sum(dim=2).clamp(min=1)
+    means = (scores * valid).sum(dim=2) / counts
+    var = ((scores - means.unsqueeze(2)) * valid).pow(2).sum(dim=2) / counts
+    stds = (var * (counts / (counts - 1).clamp(min=1))).sqrt()  # 与原 torch.std 无偏口径一致
     confidence = top2[:, :, 0] - means
     margins = top2[:, :, 0] - top2[:, :, 1]
     top5 = torch.topk(scores, k=5, dim=2).indices
@@ -135,6 +140,9 @@ def main():
     parser.add_argument("--disable-calibration", action="store_true",
                         help="Force the bounded history penalty to zero, isolating the "
                              "semantic-fusion contribution from history calibration.")
+    parser.add_argument("--mask-history", action="store_true",
+                        help="Exclude previously interacted items from candidates "
+                             "(repeat-excluded protocol variant; default keeps them).")
     parser.add_argument("--dump-per-user", default="",
                         help="If set, write per-user SASRec/fusion target ranks as jsonl for bootstrap CI.")
     parser.add_argument("--dump-mechanism", default="",
@@ -167,7 +175,7 @@ def main():
     torch.manual_seed(args.seed)
     evaluator = ExpertEvaluator.from_paths(
         args.config, args.sasrec_model, args.itemcf_model, args.semantic_emb,
-        device=args.device, mask_history=False,
+        device=args.device, mask_history=args.mask_history,
     )
     validation = collect_examples(evaluator, "val")
     test = collect_examples(evaluator, "test")
@@ -285,7 +293,7 @@ def main():
     output = {
         "dataset": evaluator.dataset.name,
         "protocol": {"gate_fit_split": "validation", "test_used_for_training_or_selection": False,
-                     "mask_history": False, "ranking": "full_catalog"},
+                     "mask_history": bool(args.mask_history), "ranking": "full_catalog"},
         "method": "repeat-aware expert gate",
         "hyperparameters": vars(args),
         "test_metrics": compute_metrics(np.concatenate(all_scores), np.concatenate(all_targets)),

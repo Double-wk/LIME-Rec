@@ -1,0 +1,1 @@
+{"dataset_config":"configs/amazon_toys.json","sasrec_model":"output_final/models/amazon_toys_sasrec_seed0.pt","itemcf_model":"output_final/models/amazon_toys_itemcf.json","semantic_emb":"output_final/models/amazon_toys_bge_base.npz","candidate_per_expert":20,"sample_seed":2027}

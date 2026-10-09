@@ -44,6 +44,11 @@ DATASETS = {
         "sasrec": "outputs/models/amazon_sports_sasrec.pt",
         "itemcf": "outputs/models/amazon_sports_itemcf.json",
     },
+    "amazon_music": {
+        "config": "configs/amazon_music.json",
+        "sasrec": "outputs/models/amazon_music_sasrec.pt",
+        "itemcf": "outputs/models/amazon_music_itemcf.json",
+    },
 }
 
 
